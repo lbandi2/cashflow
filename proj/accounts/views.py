@@ -15,8 +15,12 @@ class IndexView(LoginRequiredMixin, ListView):
     context_object_name = 'item_list'
 
     def get_queryset(self):
-        """Return the last five published values."""
-        return {}
+        queryset = {
+            'last_ops': OperationAccount.objects.order_by('-date')[:5],
+            'pending_bills': [],
+            'uncategorized_ops': OperationAccount.objects.order_by('-date').filter(category='')
+                    }
+        return queryset
 
 
 class OpUpdate(UpdateView):
