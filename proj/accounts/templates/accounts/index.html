@@ -1,0 +1,15 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Cuentas {% endblock title %}
+
+{% block content %}
+
+<div class="my-5 container" align="center">
+
+    <a href="{% url 'accounts:last_ops' %}" class="btn btn-dark me-1">Ultimos movimientos</a>
+
+    <a href="{% url 'bills:accounts' %}" class="btn btn-dark me-1">Resúmenes</a>
+
+</div>
+
+{% endblock %}

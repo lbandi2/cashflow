@@ -1,0 +1,74 @@
+{% extends 'portal/base.html' %}
+
+{% load static %}
+
+{% block title %} Archive {% endblock %}
+
+{% block content %}
+
+<div class="my-5 container">
+
+{% if quote_list %}
+
+    {% for bank in quote_list.ars %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                <th scope="col">{{ bank.0.name | slice:4 | upper }}</th>
+                <th scope="col">Compra</th>
+                <th scope="col">Venta</th>
+                <th scope="col" class="d-none d-lg-block">Variación</th>
+            </tr>
+            </thead>
+            <tbody>
+    
+            {% for quote in bank %}
+                <tr>
+                {% comment %} <td>{{ quote.datetime | date:"Y-m-d H:i:s" }}</td> {% endcomment %}
+                <td>{{ quote.datetime | date:"m-d" }}</td>
+                <td>{{ quote.buy | floatformat:2 }}</td>
+                <td>{{ quote.sell | floatformat:2 }}</td>
+                <td class="d-none d-lg-block">{{ quote.last_variation }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No quotes are available.</p>
+{% endif %}
+
+{% for bank in quote_list.cop %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+    <thead>
+        <tr>
+        <th scope="col">{% if bank.0.name != 'generic' %}{{ bank.0.name | upper }}{% else %}COP{% endif %}</th>
+        <th scope="col">Compra</th>
+        <th scope="col">Venta</th>
+        <th scope="col" class="d-none d-lg-block">Variación</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for quote in bank %}
+        <tr>
+        {% comment %} <td>{{ quote.datetime | date:"Y-m-d H:i:s" }}</td> {% endcomment %}
+        <td>{{ quote.datetime | date:"m-d" }}</td>
+        <td>{{ quote.buy | floatformat:2 }}</td>
+        <td>{{ quote.sell | floatformat:2 }}</td>
+        <td class="d-none d-lg-block">{{ quote.last_variation }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+{% endfor %}
+
+
+</div>
+
+{% endblock %}
+

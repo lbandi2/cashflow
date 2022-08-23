@@ -1,0 +1,15 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Resúmenes {% endblock %}
+
+{% block content %}
+
+<div class="my-5 container" align="center">
+
+    <a href="{% url 'bills:credit_cards' %}" class="btn btn-dark me-1">Tarjetas de crédito</a>
+
+    <a href="{% url 'bills:accounts' %}" class="btn btn-dark me-1">Cuentas</a>
+
+</div>
+
+{% endblock %}

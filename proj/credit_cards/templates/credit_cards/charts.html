@@ -1,0 +1,82 @@
+{% extends 'portal/base_charts.html' %}
+
+{% block title %} Gráficos {% endblock title %}
+
+{% comment %} {% block chart %} {% endcomment %}
+{% block content %}
+
+    {% comment %}<canvas id="PieChart" style="width:100%;max-width:600px"></canvas>
+
+    <script>
+        {% comment %} var xValues = ["Italy", "France", "Spain", "USA", "Argentina"]; {% endcomment %}
+        {% comment %} var yValues = [55, 49, 44, 24, 15];
+        var xValues = "{{item_list.keys | safe }}";
+        var yValues = "{{item_list.values | safe }}"
+        var barColors = [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "orange"
+        ];
+
+        new Chart("PieChart", {
+            type: "pie",
+            data: {
+                labels: xValues,
+                datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+                }]
+            },
+            options: {
+                title: {
+                display: true,
+                text: "World Wide Wine Production"
+                }
+            }
+        });
+    </script>{% endcomment %}
+
+{{ item_list.values }}
+
+{% for item in item_list.values %}
+
+    <div id="container" style="width: 50%;max-width:350px">
+        <div class="my-3 container" style="text-align:center">
+            <h4>{{ item_list.keys }}</h4>
+        </div>
+        <div class="row">
+            <canvas id="pie-chart"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        var config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: {{ item.values | safe }},
+                    backgroundColor: {{ item.colors | safe }},
+                label: 'Por categoría'
+                }],
+            labels: {{ item.keys | safe }}
+            },
+            options: {
+            responsive: true,
+            legend: {
+                display: false
+                }
+            }
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById('pie-chart').getContext('2d');
+            window.myPie = new Chart(ctx, config);
+        };
+    
+    </script>
+{% endfor %}
+
+{% comment %} {% endblock chart %} {% endcomment %}
+{% endblock %}

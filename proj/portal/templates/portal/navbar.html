@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+
+<nav class='navbar navbar-dark bg-dark'>
+    <div class='ms-auto'>
+        <a href="{% url 'portal:index' %}" class="btn btn-secondary me-1"><i class="material-icons">home</i></a>
+        <a href="{% url 'dolar:index' %}" class="btn btn-secondary me-1"><i class="material-icons">show_chart</i></a>
+
+        <a href="{% url 'accounts:index' %}" class="btn btn-secondary me-1"><i class="material-icons">attach_money</i></a>
+    
+        <button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'credit_cards:index' %}"><i class="material-icons">credit_card</i><span class="badge badge-warning">{{ data.pending_bills.count }}</span></button>
+    
+        {% comment %} <a href="{% url 'quotes:profile' %}" class="btn btn-outline-light me-1">{{ user.first_name }}</a> {% endcomment %}
+        <a href="{% url 'home:logout' %}" class="btn btn-danger me-1"><i class="material-icons">power_settings_new</i></a>
+    </div>
+</nav>
+
+{% endblock %}

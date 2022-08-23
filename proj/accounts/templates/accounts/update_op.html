@@ -1,0 +1,44 @@
+<!-- todo_list/todo_app/templates/todo_app/todoitem_form.html -->
+{% extends "portal/base.html" %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block title %} Editar operación de cuenta {% endblock title %}
+
+{% block content %}
+
+{% comment %} {{card}}
+
+{{obj}} {% endcomment %}
+
+{% comment %} {% for item in form %}
+    {{item}}
+{% endfor %} {% endcomment %}
+
+<div align="center" class="my-1 container">
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <br>
+        <input
+            class="btn btn-success me-1"
+            value="Actualizar"
+            type="submit">
+        <input
+            class="btn btn-secondary me-1"
+            value="Cancelar"
+            type="button"
+            onclick="location.href='{% url "accounts:last_ops" %}'">
+        <input
+            class="btn btn-warning me-1"
+            value="Agregar categoría"
+            type="button"
+            onclick="location.href='{% url "categories:add" %}'">
+    </form>
+</div>
+
+{% endblock %}

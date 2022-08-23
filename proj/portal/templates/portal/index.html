@@ -1,0 +1,234 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} {% endblock title %}
+
+{% block back %} {% endblock back %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block content %}
+
+<!-- Pending bills -->
+
+{% if data.pending_bills %}
+    <div class="my-3 container">
+        <h4>&#9200; Resúmenes pendientes</h4>
+    </div>
+
+    <div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col" class="d-none d-md-block">Factura</th>
+                    <th scope="col">Tarjeta</th>
+                    <th scope="col" class="d-none d-md-block">Titular</th>
+                    <th scope="col">Vencim.</th>
+                    <th scope="col" class="d-none d-md-block">Pago mínimo</th>
+                    <th scope="col" class="d-block d-md-none">Pago</th>
+                    <th scope="col">Pago total</th>
+                    <th scope="col" style="text-align:center">Verificado</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in data.pending_bills %}
+                    <tr>
+                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink text-decoration-none">&#x1F50D;</td>
+                    <td class="d-none d-md-block">&#x1F4C3; {{ item.bill_id }}</td>
+                    <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
+                    <td class="d-none d-md-block">{{ item.card.name }}</td>
+                    <td>{{ item.due_date | date:"m-d" }}</td>
+                    <td>{{ item.min_pay | floatformat:2 | intcomma }}</td>
+                    <td>{{ item.total_pay | floatformat:2 | intcomma }}</td>
+                    <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Tarjeta</th>
+                    <th scope="col">Vencim.</th>
+                    <th scope="col">Pago</th>
+                    <th scope="col" style="text-align:center">Verificado</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in data.pending_bills %}
+                    <tr>
+                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink text-decoration-none">&#x1F50D;</td>
+                    <td>{{ item.card.number }}</td>
+                    <td>{{ item.due_date | date:"m-d" }}</td>
+                    <td>{{ item.min_pay | floatformat:2 | intcomma }}</td>
+                    <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endif %}
+
+<!-- Card operations -->
+
+<div class="my-3 container">
+    <h4>&#x1F4B3; Tarjetas</h4>
+</div>
+
+<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Entidad</th>
+                <th scope="col">Importe</th>
+                <th scope="col">Tarjeta</th>
+                <th scope="col">Categoría</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in data.card_ops %}
+            <tr>
+                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+                <td>{{ item.date | date:"Y-m-d H:m" }}</td>
+                <td>{{ item.entity }}</td>
+                <td style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
+                <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Entidad</th>
+                <th scope="col">Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in data.card_ops %}
+            <tr>
+                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+                <td>{{ item.entity }}</td>
+                <td style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Account operations -->
+
+<div class="my-3 container">
+    <h4>&#x1F4B5; Cuentas</h4>
+</div>
+
+<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col" class="d-none d-md-block">Fecha</th>
+                <th scope="col">Entidad</th>
+                <th scope="col">Importe</th>
+                <th scope="col" class="d-none d-md-block">Cuenta</th>
+                <th scope="col">Categoría</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in data.account_ops %}
+            <tr>
+                <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+                <td class="d-none d-md-block">{{ item.date | date:"Y-m-d H:m" }}</td>
+                <td>{{ item.entity }}</td>
+                <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                <td class="d-none d-md-block">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.owner }}</td>
+                <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Entidad</th>
+                <th scope="col">Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in data.account_ops %}
+            <tr>
+                <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+                <td>{{ item.entity }}</td>
+                <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Dolar -->
+
+<div class="my-3 container">
+    <h4>&#x1F4C8; Cotizaciones</h4>
+</div>
+
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col" style="text-align:center">Compra</th>
+            <th scope="col" style="text-align:center">Venta</th>
+            <th scope="col" style="text-align:center">Otro</th>
+            <th scope="col" class="d-none d-md-block">Update</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quote in data.dolar %}
+            <tr>
+            <td><img src="{% static '/images/dolar/' %}{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}.png" width="20" height="20"></td>
+            <td><a class="link-dark text-decoration-none rowlink" href="/dolar/history/{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}"><strong>{% if 'gene' in quote.0.name %}COP{% else %}{{ quote.0.name | slice:4 | upper }}{% endif %}</strong></a></td>
+            <td style="text-align:right">{{ quote.0.buy | floatformat:2 }}{% if quote.0.buy > quote.1.buy or quote.1.buy == None %}<font color="red">&#9650;</font>{% else %}<font color="green">&#9660;</font>{% endif %}</td>
+            <td style="text-align:right">{{ quote.0.sell | floatformat:2 }}{% if quote.0.sell > quote.1.sell or quote.1.sell == None %}<font color="red">&#9650;</font>{% else %}<font color="green">&#9660;</font>{% endif %}</td>
+            <td style="text-align:right">{% if quote.0.other > 0 %}{{ quote.0.other | floatformat:2 }}{% if quote.0.other > quote.1.other or quote.1.other == None %}<font color="red">&#9650;</font>{% else %}<font color="green">&#9660;</font>{% endif %}{% endif %}</td>
+            <td class="d-none d-md-block">{{ quote.0.time_relative }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

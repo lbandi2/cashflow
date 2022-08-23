@@ -1,0 +1,97 @@
+{% extends 'portal/base.html' %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block title %} Resúmenes de tarjetas de crédito {% endblock title %}
+
+{% block content %}
+
+{% comment %} <div class="col-md-12" align="right">
+    <a href="{% url 'credit_cards:last_ops_by_day' %}" class="btn btn-outline-dark me-1">Ver día por dia</a>
+    <a href="{% url 'credit_cards:last_ops_by_card' %}" class="btn btn-outline-dark me-1">Ver por tarjeta</a>
+</div>
+<br> {% endcomment %}
+
+{% if item_list.unpaid %}
+<div class="my-5 container">
+        <h3>Pendientes de pago</h3>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">Tarjeta</th>
+            <th scope="col">Titular</th>
+            <th scope="col" style="text-align:center">Vencimiento</th>
+            <th scope="col">Pago mínimo</th>
+            <th scope="col">Pago total</th>
+            <th scope="col" style="text-align:center">Inconsistencias</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in item_list.unpaid %}
+        {% if item.has_inconsistency %}
+            <tr class="table-danger">
+        {% else %}
+            <tr>
+        {% endif %}
+            <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+            <td>{{ item.bill_id }}</td>
+            <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
+            <td>{{ item.card.name }}</td>
+            <td style="text-align:center">{{ item.due_date | date:"m-d" }}</td>
+            <td class="currency" align="right">{{ item.min_pay | floatformat:2 | intcomma }}</td>
+            <td class="currency" align="right">{{ item.total_pay | floatformat:2 | intcomma }}</td>
+            <td style="text-align:center">{% if item.inconsistencies != 0 %}<strong>{{ item.inconsistencies }}</strong>{% elif item.has_inconsistency %}<strong>1</strong>{% else %}-{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+
+{% endif %}
+
+{% if item_list.paid %}
+<div class="my-5 container">
+        <h3>Anteriores</h3>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">Tarjeta</th>
+            <th scope="col">Titular</th>
+            <th scope="col" style="text-align:center">Vencimiento</th>
+            <th scope="col">Pago mínimo</th>
+            <th scope="col">Pago total</th>
+            <th scope="col" style="text-align:center">Inconsistencias</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in item_list.paid %}
+        <tr>
+            <td class="prev_items"><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+            <td class="prev_items">{{ item.bill_id }}</td>
+            <td class="prev_items"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
+            <td class="prev_items">{{ item.card.name }}</td>
+            <td class="prev_items" style="text-align:center">{{ item.due_date | date:"m-d" }}</td>
+            <td class="prev_items currency" align="right">{{ item.min_pay | floatformat:2 | intcomma }}</td>
+            <td class="prev_items currency" align="right">{{ item.total_pay | floatformat:2 | intcomma }}</td>
+            <td class="prev_items" style="text-align:center">{% if item.inconsistencies != 0 %}<strong>{{ item.inconsistencies }}</strong>{% elif item.has_inconsistency %}<strong>1</strong>{% else %}-{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+
+{% endif %}
+
+{% endblock %}

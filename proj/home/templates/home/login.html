@@ -1,0 +1,16 @@
+{% extends 'home/base.html' %}
+
+{% block title %} Finance {% endblock %}
+
+{% block content %}
+
+<div class="my-5 container" align="center">
+
+<form method="post"> {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-secondary" name="Sign in"> 
+    {% comment %} <a href="{% url 'home:signup' %}" class="btn btn-dark me-1">Signup</a> {% endcomment %}
+
+</div>
+
+{% endblock %}

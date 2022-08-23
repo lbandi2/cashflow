@@ -1,0 +1,17 @@
+{% extends 'home/base.html' %}
+
+{% block title %} Logged out successfully {% endblock %}
+
+{% block content %}
+
+<div class="my-5 container" align="center">
+
+    <h3>Come back soon!</h3>
+
+    <br><br>
+
+    <a href="{% url 'home:login' %}" class="btn btn-dark me-1">Sign in</a>
+
+</div>
+
+{% endblock %}

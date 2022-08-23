@@ -1,0 +1,31 @@
+{% extends 'portal/base.html' %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block title %} Categorías {% endblock %}
+
+{% block content %}
+
+    <div class="table">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in item_list %}
+            <tr>
+                <td><a href="{% url 'categories:edit' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+                <td>{{ item.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
