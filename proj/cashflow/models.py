@@ -12,6 +12,9 @@ class Account(models.Model):
     def __str__(self):
         return f"[{self.number}] {self.owner}"
 
+    def name(self):
+        return self.owner.split(' ')[0]
+
 class Card(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     brand = models.CharField(max_length=10)
@@ -92,6 +95,9 @@ class OperationCard(models.Model):
     def __str__(self):
         return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
 
+    def date_string(self):
+        return self.date.strftime('%Y-%m-%d')
+
 
 class OperationAccount(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -103,6 +109,9 @@ class OperationAccount(models.Model):
 
     def __str__(self):
         return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
+
+    def date_string(self):
+        return self.date.strftime('%Y-%m-%d')
 
 
 class OperationCategories(models.Model):

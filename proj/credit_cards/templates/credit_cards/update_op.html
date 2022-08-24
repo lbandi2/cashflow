@@ -21,14 +21,19 @@
         </table>
         <br>
         <input
-            class="btn btn-secondary me-1"
+            class="btn btn-success me-1"
             value="Actualizar"
             type="submit">
         <input
-            class="btn btn-secondary me-1"
+            class="btn btn-danger me-1"
             value="Cancelar"
             type="button"
             onclick="location.href='{% url "credit_cards:last_ops" %}'">
+        <input
+            class="btn btn-secondary me-1"
+            value="&#127758; Ver en Maps"
+            type="button"
+            onclick="window.open('https://timeline.google.com/maps/timeline?pb=!1m2!1m1!1s{{ object.date_string }}','_blank')">
         <input
             class="btn btn-warning me-1"
             value="Agregar categoría"

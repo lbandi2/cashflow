@@ -16,62 +16,6 @@
 
 </div>
 
-<div class="my-3 container">
-    <h4>&#x1F4B3; Movimientos</h4>
-</div>
-
-<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
-    <table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Importe</th>
-            <th scope="col">Entidad</th>
-            <th scope="col">Tarjeta</th>
-            <th scope="col">Categoría</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for item in item_list.last_ops %}
-        <tr>
-            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
-            <td>{{ item.date | date:"Y-m-d H:m" }}</td>
-            <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-            <td>{{ item.entity }}</td>
-            <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
-            <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-    </table>
-</div>
-
-<div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
-    <table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Importe</th>
-            <th scope="col">Entidad</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for item in item_list.last_ops %}
-        <tr>
-            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
-            <td>{{ item.date | date:"m-d" }}</td>
-            <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-            <td>{{ item.entity | truncatechars:14 }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-    </table>
-</div>
-
-<br>
-
 {% if item_list.pending_bills %}
     <div class="my-3 container">
         <h4>&#9200; Resúmenes pendientes</h4>
@@ -82,9 +26,8 @@
             <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Factura</th>
                     <th scope="col">Tarjeta</th>
+                    <th scope="col">Factura</th>
                     <th scope="col">Titular</th>
                     <th scope="col">Vencimiento</th>
                     <th scope="col">Pago</th>
@@ -95,9 +38,8 @@
             <tbody>
             {% for item in item_list.pending_bills %}
                     <tr>
-                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink text-decoration-none">&#x1F50D;</td>
+                    <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> <a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink link-dark text-decoration-none">{{ item.card.number }}</a></td>
                     <td>&#x1F4C3; {{ item.bill_id }}</td>
-                    <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
                     <td>{{ item.card.name }}</td>
                     <td>{{ item.due_date | date:"Y-m-d" }}</td>
                     <td align="right">{{ item.min_pay | floatformat:2 | intcomma }}</td>
@@ -115,20 +57,19 @@
             <table class="table table-hover">
             <thead>
                 <tr>
+                    <th scope="col" style="text-align:center">Tarjeta</th>
+                    <th scope="col" style="text-align:center">Venc.</th>
+                    <th scope="col" style="text-align:center">Pago</th>
                     <th scope="col"></th>
-                    <th scope="col">Tarjeta</th>
-                    <th scope="col">Venc.</th>
-                    <th scope="col">Pago</th>
-                    <th scope="col" style="text-align:center">Verif.</th>
                 </tr>
             </thead>
             <tbody>
             {% for item in item_list.pending_bills %}
                     <tr>
-                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink text-decoration-none">&#x1F50D;</td>
-                    <td>{{ item.card.number }}</td>
-                    <td>{{ item.due_date | date:"m-d" }}</td>
-                    <td align="right">{{ item.min_pay | floatformat:2 | intcomma }}</td>
+                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</td>
+                    {% comment %} <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td> {% endcomment %}
+                    <td style="text-align:center">{{ item.due_date | date:"m-d" }}</td>
+                    <td style="text-align:center">{{ item.min_pay | floatformat:2 | intcomma }}</td>
                     <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
                 </tr>
             {% endfor %}
@@ -141,19 +82,75 @@
 
 <br>
 
-{% if item_list.uncategorized_ops %}
-<div class="container-fluid d-none d-md-block">  <!-- Desktop version -->
-    <div class="my-3 container">
-        <h4>&#x1F4DD; Movimientos sin categorizar</h4>
-    </div>
+<div class="my-3 container">
+    <h4>&#x1F4B3; Movimientos</h4>
+</div>
 
+<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Fecha</th>
+            {% comment %} <th scope="col">Tarjeta</th> {% endcomment %}
+            <th scope="col">Entidad</th>
+            <th scope="col">Importe</th>
+            <th scope="col">Categoría</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in item_list.last_ops %}
+        <tr>
+            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+            {% comment %} <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></a></td> {% endcomment %}
+            <td>{{ item.date | date:"Y-m-d H:m" }}</td>
+            <td>{{ item.entity }}</td>
+            <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+            <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+
+<div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Entidad</th>
+            <th scope="col">Importe</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in item_list.last_ops %}
+        <tr>
+            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</a></td>
+            <td>{{ item.date | date:"m-d" }}</td>
+            <td>{{ item.entity | truncatechars:14 }}</td>
+            <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+
+<br>
+
+{% if item_list.uncategorized_ops %}
+
+<div class="my-3 container">
+    <h4>&#x1F4DD; Sin categorizar</h4>
+</div>
+
+<div class="container-fluid d-none d-md-block">  <!-- Desktop version -->
     <div class="table-responsive">
         <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Fecha</th>
-                <th scope="col">Tarjeta</th>
                 <th scope="col">Entidad</th>
                 <th scope="col">Importe</th>
             </tr>
@@ -161,9 +158,9 @@
         <tbody>
         {% for item in item_list.uncategorized_ops %}
             <tr>
-                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                {% comment %} <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td> {% endcomment %}
                 <td>{{ item.date | date:"Y-m-d H:m" }}</td>
-                <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
                 <td>{{ item.entity }}</td>
                 <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             </tr>
@@ -172,11 +169,8 @@
         </table>
     </div>
 </div>
-<div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
-    <div class="my-3 container">
-        <h4>&#x1F4DD; Movimientos sin categorizar</h4>
-    </div>
 
+<div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
     <div class="table-responsive">
         <table class="table table-sm table-hover">
         <thead>
@@ -190,9 +184,10 @@
         <tbody>
         {% for item in item_list.uncategorized_ops %}
             <tr>
-                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
+                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</td>
+                {% comment %} <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td> {% endcomment %}
                 <td>{{ item.date | date:"Y-m-d" }}</td>
-                <td>{{ item.entity | truncatechars:12 }}</td>
+                <td>{{ item.entity | truncatechars:10 }}</td>
                 <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             </tr>
         {% endfor %}
