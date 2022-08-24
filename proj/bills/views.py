@@ -75,7 +75,7 @@ class BillOpViewDetail(LoginRequiredMixin, ListView):
         context = super(BillOpViewDetail, self).get_context_data()
         context["bill"] = Bill.objects.get(pk=self.kwargs["bill"])
         context["op_bill"] = OperationBill.objects.get(pk=self.kwargs["op_bill"])
-        print(self.kwargs)
+        # print(self.kwargs)
         return context
 
     def get_queryset(self):
