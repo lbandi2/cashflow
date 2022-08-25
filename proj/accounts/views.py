@@ -9,6 +9,17 @@ from cashflow.models import Card, Account, Bill, OperationCard, OperationAccount
 from .forms import EditOpForm
 
 
+class RedirectToPreviousMixin:
+    default_redirect = '/'
+
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER', self.default_redirect)
+        return super().get(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return self.request.session['previous_page']
+
+
 class IndexView(LoginRequiredMixin, ListView):
     template_name = 'accounts/index.html'
     login_url = 'home:login'
@@ -23,13 +34,10 @@ class IndexView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class OpUpdate(UpdateView):
+class OpUpdate(RedirectToPreviousMixin, UpdateView):
     template_name = 'accounts/update_op.html'
     form_class = EditOpForm
     model = OperationAccount
-    # fields = [
-    #     "category"
-    # ]
 
     def get_context_data(self):
         context = super(OpUpdate, self).get_context_data()
@@ -37,9 +45,6 @@ class OpUpdate(UpdateView):
         context["account"] = self.object.account
         context["title"] = "Edit item"
         return context
-    
-    def get_success_url(self):
-        return reverse("accounts:last_ops")
 
 
 class LastOpsView(LoginRequiredMixin, ListView):

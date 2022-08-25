@@ -50,7 +50,7 @@
 <div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
     <div class="row">
         <div class="col">
-            <h4>{% if bill.card.account.bank != 'generic' %}<img src="{% static 'images/' %}{{bill.card.account.bank}}-logo.png">{% endif %} <img src="{% static 'images/cards/' %}{{bill.card.brand}}.png"> {% if bill.card.account.is_corporate %}Corporate{% endif %}{% if bill.card.tier %}{{ bill.card.tier | title }}{% endif %} *{{ bill.card.number }} </h4>
+            <h4>{% if bill.card.account.bank != 'generic' %}<img src="{% static 'images/' %}{{bill.card.account.bank}}-logo.png" height=18px>{% endif %} <img src="{% static 'images/cards/' %}{{bill.card.brand}}.png" height=18px> {% if bill.card.account.is_corporate %}Corporate{% endif %}{% if bill.card.tier %}{{ bill.card.tier | title }}{% endif %} *{{ bill.card.number }} </h4>
             <div>
             <strong>Titular</strong><br> {{ bill.card.owner | title }}
             </div>
