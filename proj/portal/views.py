@@ -81,6 +81,6 @@ class PortalView(LoginRequiredMixin, ListView):
                 .filter(card_id=card_id)\
                 .filter(date__gt=bills[0].end_date) # use last bill to get end of last billable period
             for item in ops:
-                amount += item.amount
+                amount += item.amount / item.dues
         return amount
 

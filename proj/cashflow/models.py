@@ -91,6 +91,7 @@ class OperationCard(models.Model):
     amount = models.FloatField()
     entity = models.CharField(max_length=50)
     category = models.CharField(max_length=20, null=True, blank=True)
+    dues = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
@@ -106,6 +107,7 @@ class OperationAccount(models.Model):
     amount = models.FloatField()
     entity = models.CharField(max_length=50)
     category = models.CharField(max_length=20, null=True, blank=True)
+    dues = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"

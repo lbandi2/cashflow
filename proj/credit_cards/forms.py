@@ -12,11 +12,12 @@ class EditOpForm(ModelForm):
     type = forms.CharField(label='Tipo', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     amount = forms.FloatField(label='Monto', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     entity = forms.CharField(label='Entidad', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    dues = forms.CharField(label='Cuotas', widget=forms.TextInput(attrs={'class': 'form-control'}))
     category = forms.CharField(label='Categoría', max_length=20, widget=forms.Select(choices=CATEGORIES, attrs={'class': 'form-control'}))
 
     class Meta:
         model = OperationCard
-        fields = ('id', 'date', 'type', 'entity', 'amount', 'category')
+        fields = ('id', 'date', 'type', 'entity', 'amount', 'category', 'dues')
 
 # class PasswordForm(PasswordChangeForm):
 #     old_password = forms.CharField(label='Current password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))

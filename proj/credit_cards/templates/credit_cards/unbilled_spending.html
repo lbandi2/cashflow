@@ -50,6 +50,7 @@
                 <th scope="col">Entidad</th>
                 <th scope="col">Importe</th>
                 <th scope="col">Categoría</th>
+                <th scope="col">Cuotas</th>
             </tr>
         </thead>
         <tbody>
@@ -60,6 +61,7 @@
                 <td>{{ item.entity }}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
                 <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+                <td>{{ item.dues }}</td>
             </tr>
         {% endfor %}
         </tbody>
