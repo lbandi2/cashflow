@@ -71,7 +71,7 @@
 
 <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
     <div class="table-responsive">
-        <table class="table table-striped table-hover">
+        <table class="table table-sm table-striped table-hover">
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -85,7 +85,7 @@
             <tr>
                 <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</a></td>
                 <td>{{ item.date | date:"m-d" }}</td>
-                <td>{{ item.entity | truncatechars:10 }}</td>
+                <td>{{ item.entity | truncatechars:12 }}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             </tr>
         {% endfor %}
