@@ -8,8 +8,15 @@ from django import forms
 # CATEGORIES = sorted({(item.name, item.name) for item in OperationCategories.objects.all()})
 
 
+# class EditCatForm(ModelForm):
+#     name = forms.CharField(label='Nombre', max_length=20)
+
+#     class Meta:
+#         model = OperationCategories
+#         fields = ['name']
+
 class EditCatForm(ModelForm):
-    name = forms.CharField(label='Nombre', max_length=20)
+    name = forms.CharField(label='Nombre', max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = OperationCategories

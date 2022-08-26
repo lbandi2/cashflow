@@ -1,12 +1,11 @@
 from django.forms import ModelForm
 
-from cashflow.models import OperationCard, OperationCategories, Card
+from cashflow.models import OperationCard, OperationCategories
 
 from django import forms
 
 
 CATEGORIES = sorted({(item.name, item.name) for item in OperationCategories.objects.all()})
-
 
 class EditOpForm(ModelForm):
     date = forms.DateTimeField(label='Fecha', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))

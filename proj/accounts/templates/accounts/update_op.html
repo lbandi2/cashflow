@@ -5,45 +5,69 @@
 
 {% load humanize %}
 
-{% block title %} Editar operación de cuenta {% endblock title %}
+{% block title %} Editar operación {% endblock title %}
 
 {% block content %}
 
-{% comment %} {{card}}
-
-{{obj}} {% endcomment %}
-
-{% comment %} {% for item in form %}
-    {{item}}
-{% endfor %} {% endcomment %}
-
-<div align="center" class="my-1 container">
+<div class="form-group col col-md-5 mx-auto">
     <form method="post">
         {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <br>
-        <input
-            class="btn btn-success me-1"
-            value="Actualizar"
-            type="submit">
-        <input
-            class="btn btn-secondary me-1"
-            value="Cancelar"
-            type="button"
-            onclick="location.href='{% url "accounts:last_ops" %}'">
-        <input
-            class="btn btn-secondary me-1"
-            value="&#127758; Ver en Maps"
-            type="button"
-            onclick="window.open('https://timeline.google.com/maps/timeline?pb=!1m2!1m1!1s{{ object.date_string }}','_blank')">
-        <input
-            class="btn btn-warning me-1"
-            value="Agregar categoría"
-            type="button"
-            onclick="location.href='{% url "categories:add" %}'">
+        <p>
+            <label for="id_card">Cuenta:</label>
+            <input type="text" class="form-control" value="{{ object.account.bank | upper }} *{{ object.account.number }} {{ object.account.owner | title }}" disabled=True>
+        </p>
+        <p>
+            <label for="date">Fecha:</label>{{ form.date }}
+        </p>
+        <p>
+            <label for="date">Tipo:</label>{{ form.type }}
+        </p>
+        <p>
+            <label for="date">Entidad:</label>{{ form.entity }}
+        </p>
+        <p>
+            <label for="date">Monto:</label>{{ form.amount }}
+        </p>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>
+                        <label for="date">Categoría:</label>{{ form.category }}
+                    </p>
+                </div>
+                <div class="col">
+                    <br>
+                    <p>
+                        <input
+                        class="btn btn-warning me-1"
+                        value="Agregar"
+                        type="button"
+                        onclick="location.href='{% url "categories:add" %}'">
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+
+        <div class="container" align="center">
+            <input
+                class="btn btn-success me-1"
+                value="Actualizar"
+                type="submit">
+            <input
+                class="btn btn-danger me-1"
+                value="Cancelar"
+                type="button"
+                onclick="location.href='javascript:history.go(-1)'"> <!-- TODO: redirect to previous page -->
+            <input
+                class="btn btn-secondary me-1"
+                value="&#127758; Ver en Maps"
+                type="button"
+                onclick="window.open('https://timeline.google.com/maps/timeline?pb=!1m2!1m1!1s{{ object.date_string }}','_blank')">
+        </div>
     </form>
 </div>
+
 
 {% endblock %}

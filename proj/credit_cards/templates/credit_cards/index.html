@@ -66,7 +66,7 @@
             <tbody>
             {% for item in item_list.pending_bills %}
                     <tr>
-                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px>{{ item.card.number }}</td>
+                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</td>
                     {% comment %} <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td> {% endcomment %}
                     <td style="text-align:center">{{ item.due_date | date:"m-d" }}</td>
                     <td style="text-align:center">{{ item.min_pay | floatformat:2 | intcomma }}</td>
@@ -126,7 +126,7 @@
     <tbody>
     {% for item in item_list.last_ops %}
         <tr>
-            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px>{{ item.card.number }}</a></td>
+            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</a></td>
             <td>{{ item.date | date:"m-d" }}</td>
             <td>{{ item.entity | truncatechars:14 }}</td>
             <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
@@ -184,9 +184,9 @@
         <tbody>
         {% for item in item_list.uncategorized_ops %}
             <tr>
-                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px>{{ item.card.number }}</td>
+                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</td>
                 {% comment %} <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td> {% endcomment %}
-                <td>{{ item.date | date:"Y-m-d" }}</td>
+                <td>{{ item.date | date:"y-m-d" }}</td>
                 <td>{{ item.entity | truncatechars:10 }}</td>
                 <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             </tr>
