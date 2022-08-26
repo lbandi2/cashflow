@@ -24,6 +24,8 @@ class PortalView(LoginRequiredMixin, ListView):
     context_object_name = 'data'
 
     def get_queryset(self):
+        print(self.kwargs)
+
         """Return the last five published values."""
         values = {
             "dolar": [self.get_latest_dolar('generic'), self.get_latest_dolar('blue'), self.get_latest_dolar('bna')],
@@ -56,14 +58,11 @@ class PortalView(LoginRequiredMixin, ListView):
         return subtotal
 
     def unbilled_spending_per_card(self):
-        # total = 0
         spending = []
         for card in Card.objects.all():
             if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
                 spent = self.card_unbilled_spending(card.id)
                 spending.append([card, spent])
-                # total += spent
-        # spending.append(["total", total])
         return spending
 
     def unbilled_spending_total(self):

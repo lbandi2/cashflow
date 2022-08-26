@@ -11,7 +11,7 @@
 <div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
     <div class="row">
         <div class="col-md-4">
-            <h4>{% if bill.card.account.bank != 'generic' %}<img src="{% static 'images/' %}{{bill.card.account.bank}}-logo.png">{% endif %} <img src="{% static 'images/cards/' %}{{bill.card.brand}}.png"> {% if bill.card.account.is_corporate %}Corporate{% endif %}{% if bill.card.tier %}{{ bill.card.tier | title }}{% endif %} *{{ bill.card.number }} </h4>
+            <h4>{% if bill.card.account.bank != 'generic' %}<img src="{% static 'images/' %}{{bill.card.account.bank}}-logo.png">{% endif %} <img src="{% static 'images/cards/' %}{{bill.card.brand}}.png" height=25px> {% if bill.card.account.is_corporate %}Corporate{% endif %}{% if bill.card.tier %}{{ bill.card.tier | title }}{% endif %} *{{ bill.card.number }} </h4>
             <div>
             <strong>Titular:</strong> {{ bill.card.owner | title }}
             </div>
@@ -50,7 +50,7 @@
 <div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
     <div class="row">
         <div class="col">
-            <h4>{% if bill.card.account.bank != 'generic' %}<img src="{% static 'images/' %}{{bill.card.account.bank}}-logo.png" height=18px>{% endif %} <img src="{% static 'images/cards/' %}{{bill.card.brand}}.png" height=18px> {% if bill.card.account.is_corporate %}Corporate{% endif %}{% if bill.card.tier %}{{ bill.card.tier | title }}{% endif %} *{{ bill.card.number }} </h4>
+            <h4>{% if bill.card.account.bank != 'generic' %}<img src="{% static 'images/' %}{{bill.card.account.bank}}-logo.png" height=18px>{% endif %} <img src="{% static 'images/cards/' %}{{bill.card.brand}}.png" height=18px> {% if bill.card.account.is_corporate %}Corp{% endif %}{% if bill.card.tier %}{{ bill.card.tier | title }}{% endif %} *{{ bill.card.number }} </h4>
             <div>
             <strong>Titular</strong><br> {{ bill.card.owner | title }}
             </div>
@@ -142,7 +142,7 @@
                 {% endif %}
                     {% comment %} <td><a href="{% url 'bills:bill_op_view' bill.pk item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td> {% endcomment %}
                     <td><a href="{% url 'bills:bill_op_view' bill.pk item.pk %}" class="link-dark text-decoration-none rowlink">{{ item.date | date:"m-d" }}</a></td>
-                    <td>{{ item.name | truncatechars:12 }}</td>
+                    <td>{{ item.name | truncatechars:13 }}</td>
                     <td class="currency" align="right">{{ item.debits_and_credits | floatformat:2 | intcomma }}</td>
                     <td align="center">{% if item.dues == '0' %}-{% elif item.dues == '1/1' %}1{% else %}{{ item.dues }}{% endif %}</td>
                 </tr>

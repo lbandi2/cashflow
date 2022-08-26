@@ -10,5 +10,6 @@ urlpatterns = [
     path('operations/filter/by_table/', views.LastOpsView.as_view(), name='last_ops'),
     path('operations/filter/by_day/', views.LastOpsByDayView.as_view(), name='last_ops_by_day'),
     path('operations/filter/by_card/', views.LastOpsByCardView.as_view(), name='last_ops_by_card'),
+    path('operations/filter/<card>/unbilled/', views.UnbilledSpending.as_view(), name='unbilled_spending'),
     path('charts/', views.ChartsView.as_view(), name='charts')
 ]

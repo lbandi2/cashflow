@@ -48,6 +48,29 @@ class OpUpdate(RedirectToPreviousMixin, UpdateView):
         return context
 
 
+class UnbilledSpending(ListView):
+    model = Card
+    template_name = 'credit_cards/unbilled_spending.html' 
+    login_url = 'home:login'
+    context_object_name = 'item_list'
+
+    def get_queryset(self):
+        return self.card_unbilled_spending(self.kwargs["card"])
+
+    def get_context_data(self):
+        context = super(UnbilledSpending, self).get_context_data()
+        context["card"] = Card.objects.get(pk=self.kwargs["card"])
+        return context
+
+    def card_unbilled_spending(self, card_id):
+        bills = Bill.objects.order_by('-due_date').filter(card_id=card_id) # get last bill for card
+        if bills:
+            ops = OperationCard.objects.order_by('-date')\
+                .filter(card_id=card_id)\
+                .filter(date__gt=bills[0].end_date) # use last bill to get end of last billable period
+        return ops
+
+
 class LastOpsView(LoginRequiredMixin, ListView):
     model = OperationCard
     template_name = 'credit_cards/last_ops.html'
