@@ -76,7 +76,7 @@
                 <tbody>
                 {% for entry in item.1 %}
                     <tr>
-                        <td><a href="{% url 'credit_cards:update_op' entry.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ entry.card.brand }}.png" height=18px> {{ entry.card.number }}</a></td>
+                        <td><a href="{% url 'credit_cards:update_op' entry.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ entry.card.brand }}.png" height=14px> {{ entry.card.number }}</a></td>
                         <td>{{ entry.date | date:"H:m" }}</td>
                         {% comment %} <td>{{ entry.card.number }}</td> {% endcomment %}
                         <td>{{ entry.entity | truncatechars:12 }}</td>

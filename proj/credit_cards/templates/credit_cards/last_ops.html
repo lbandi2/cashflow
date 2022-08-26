@@ -83,7 +83,7 @@
             <tr>
                 <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</a></td>
                 <td>{{ item.date | date:"m-d" }}</td>
-                <td>{{ item.entity | truncatechars:11 }}</td>
+                <td>{{ item.entity | truncatechars:10 }}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             </tr>
         {% endfor %}
