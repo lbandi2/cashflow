@@ -71,7 +71,7 @@
                 <tr>
                     {% comment %} <td><a href="{% url 'accounts:update_op' entry.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td> {% endcomment %}
                     <td><a href="{% url 'accounts:update_op' entry.pk %}" class="link-dark text-decoration-none rowlink">{{ entry.date | date:"m-d" }}</a></td>
-                    <td>{{ entry.entity | truncatechars:18 }}</td>
+                    <td>{{ entry.entity | truncatechars:16 }}</td>
                     <td align="right">{{ entry.amount | floatformat:2 | intcomma }}</td>
                 </tr>
             {% endfor %}
