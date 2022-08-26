@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from cashflow.models import OperationCard, OperationCategories
+from cashflow.models import OperationCard, OperationCategories, Card
 
 from django import forms
 
@@ -9,11 +9,11 @@ CATEGORIES = sorted({(item.name, item.name) for item in OperationCategories.obje
 
 
 class EditOpForm(ModelForm):
-    date = forms.DateTimeField(label='Fecha', widget=forms.TextInput(attrs={'readonly':'readonly'}))
-    type = forms.CharField(label='Tipo', widget=forms.TextInput(attrs={'readonly':'readonly'}))
-    amount = forms.FloatField(label='Monto', widget=forms.TextInput(attrs={'readonly':'readonly'}))
-    entity = forms.CharField(label='Entidad', widget=forms.TextInput(attrs={'readonly':'readonly'}))
-    category = forms.CharField(label='Categoría', max_length=20, widget=forms.Select(choices=CATEGORIES))
+    date = forms.DateTimeField(label='Fecha', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    type = forms.CharField(label='Tipo', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    amount = forms.FloatField(label='Monto', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    entity = forms.CharField(label='Entidad', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    category = forms.CharField(label='Categoría', max_length=20, widget=forms.Select(choices=CATEGORIES, attrs={'class': 'form-control'}))
 
     class Meta:
         model = OperationCard
