@@ -77,11 +77,11 @@ class CardsViewDetail(ListView):
 
 
 # class BillOpViewDetail(LoginRequiredMixin, ListView):
-class BillOpViewDetail(LoginRequiredMixin, UpdateView):
+class BillOpViewDetail(LoginRequiredMixin, ListView):
     template_name = 'bills/edit_bill_op.html'
     form_class = EditBillOpForm
     model = OperationBill
-    # context_object_name = 'item_list'
+    context_object_name = 'item_list'
 
     def get_context_data(self):
         context = super(BillOpViewDetail, self).get_context_data()

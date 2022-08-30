@@ -115,6 +115,11 @@ class Trip(models.Model):
             amount += item.amount
         return amount
 
+    def daily_spend(self):
+        days = (self.end_date - self.start_date).days
+        return self.total_amount() / days
+        
+
 
 class OperationBill(models.Model):
     bill = models.ForeignKey(Bill, on_delete=models.CASCADE)

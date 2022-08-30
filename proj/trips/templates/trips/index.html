@@ -24,8 +24,9 @@
                 <th scope="col">Desde</th>
                 <th scope="col">Hasta</th>
                 <th scope="col">Operaciones</th>
-                <th scope="col">Gasto</th>
-                <th scope="col">Pendiente</th>
+                <th scope="col" style="text-align:right">Total</th>
+                <th scope="col" style="text-align:right">Por día</th>
+                <th scope="col" style="text-align:right">Pendiente</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +38,8 @@
                 <td>{{ item.start_date | date:"Y-m-d" }}</td>
                 <td>{{ item.end_date | date:"Y-m-d" }}</td>
                 <td>{{ item.num_operations }}</td>
-                <td>{{ item.total_amount | floatformat:2 | intcomma }}</td>
+                <td style="text-align:right">{{ item.total_amount | floatformat:2 | intcomma }}</td>
+                <td style="text-align:right">{{ item.daily_spend | floatformat:2 | intcomma }}</td>
                 <td></td>
             </tr>
         {% endfor %}
@@ -54,8 +56,8 @@
                 <th scope="col"></th>
                 <th scope="col">Lugar</th>
                 <th scope="col">País</th>
-                <th scope="col">Desde</th>
-                <th scope="col">Gasto</th>
+                <th scope="col">Fecha</th>
+                <th scope="col" style="text-align:right">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -65,7 +67,7 @@
                 <td>{{ item.place }}</td>
                 <td>{{ item.country | slice:3 | upper }}</td>
                 <td>{{ item.start_date | date:"Y" }}</td>
-                <td>{{ item.total_amount | floatformat:2 | intcomma }}</td>
+                <td style="text-align:right">{{ item.total_amount | floatformat:2 | intcomma }}</td>
             </tr>
         {% endfor %}
         </tbody>
