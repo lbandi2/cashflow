@@ -84,7 +84,7 @@ class Trip(models.Model):
         managed = False
 
     def __str__(self):
-        locale.setlocale(locale.LC_TIME, "es_CO")
+        # locale.setlocale(locale.LC_TIME, "es_ES")
         start_date = self.start_date.strftime('%b').title().strip('.')
         end_date = self.end_date.strftime('%b').title().strip('.')
         year = self.start_date.strftime('%Y')
