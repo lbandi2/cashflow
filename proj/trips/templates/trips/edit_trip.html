@@ -1,0 +1,153 @@
+{% extends "portal/base.html" %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block js_head %}
+
+<script type="text/javascript" src= "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnUncheckAll').click(function () {
+            $('input[type=checkbox]').each(
+                function (index, checkbox) {
+                    checkbox.checked = false;
+            });
+        });
+        $('#btnCheckAll').click(function () {
+            $('input[type=checkbox]').each(
+                function (index, checkbox) {
+                    checkbox.checked = true;
+            });
+        });
+    });
+</script>
+
+{% endblock js_head %}
+
+{% block title %} Editar viaje {% endblock title %}
+
+{% block content %}
+
+<div class="form-group col col-md-7 mx-auto">
+    <form method="post">
+        {% csrf_token %}
+            {{ form.as_p }}
+        <br>
+
+        <div class="container d-none d-md-block mx-auto"> <!-- Desktop version -->
+            <div class="my-3 container">
+                <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
+            </div>
+            <div class="table">
+                <table class="table table-sm table-hover" style="width: 750px">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Entidad</th>
+                        <th scope="col">Importe</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Cuotas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <input type="hidden" name="operations_id" value="{{ operations_id }}">
+                {% for item in operations %}
+                    <tr>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip %}True{% else %}False{% endif %}" name="{{ item.id }}_is_checked" class="user-action" {% if item.trip_id == trip %}checked{% endif %}>
+                            </div>
+                        </td>                            
+                        <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                        <td>{{ item.date | date:"Y-m-d H:m" }}</td>
+                        <td>{{ item.entity }}</td>
+                        <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                        <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+                        <td>{{ item.dues }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+            <div class="my-3 container">
+                <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
+            </div>
+            <div class="table">
+                <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Entidad</th>
+                        <th scope="col">Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <input type="hidden" name="operations_id" value="{{ operations_id }}">
+                {% for item in operations %}
+                    <tr>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip %}True{% else %}False{% endif %}" name="{{ item.id }}_is_checked" class="user-action" {% if item.trip_id == trip %}checked{% endif %}>
+                            </div>
+                        </td>                            
+                        <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                        <td>{{ item.date | date:"m-d" }}</td>
+                        <td>{{ item.entity | truncatechars:11 }}</td>
+                        <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        
+        <div class="container">
+            <input type="button" 
+                class="btn btn-primary btn-sm"
+                value="Ninguno" 
+                id="btnUncheckAll"/>
+            <input type="button" 
+                class="btn btn-primary btn-sm"
+                value="Todos" 
+                id="btnCheckAll"/>
+        </div>
+
+        <br>
+
+        <div class="container" align="center">
+            <input
+                class="btn btn-success me-1"
+                value="Actualizar"
+                type="submit">
+            <input
+                class="btn btn-secondary me-1"
+                value="Cancelar"
+                type="button"
+                onclick="location.href='javascript:history.go(-1)'">
+            <input
+                class="btn btn-danger me-1"
+                value="Borrar"
+                type="button"
+                onclick="location.href='{% url 'trips:delete' trip %}'">
+        </div>
+
+
+    </form>
+</div>
+
+<br><br>
+
+
+
+{% endblock %}

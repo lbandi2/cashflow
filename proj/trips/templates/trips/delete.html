@@ -1,0 +1,25 @@
+{% extends "portal/base.html" %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block title %} Confirmación {% endblock title %}
+
+{% block content %}
+
+<br>
+
+<div align="center">
+<form method="post">{% csrf_token %}
+    <p>Seguro que querés eliminar el viaje a "{{ object.place }}"?</p>
+        <input type="submit" value="Confirmar" class="btn btn-danger">
+        <input
+        class="btn btn-secondary me-1"
+        value="Cancelar"
+        type="button"
+        onclick="location.href='javascript:history.go(-1)'">
+    </form>
+</div>
+
+{% endblock content %}

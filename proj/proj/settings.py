@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     'accounts',
     'credit_cards',
     'bills',
-    'cashflow'
+    'cashflow',
+    'trips'
 ]
 
 MIDDLEWARE = [

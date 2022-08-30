@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
 
+# from trips.models import Trip
+import locale
+
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
 
@@ -70,6 +73,49 @@ class Bill(models.Model):
         return len(self.operations()) - len(matched)
 
 
+class Trip(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    place = models.CharField(max_length=50)
+    country = models.CharField(max_length=25)
+
+    class Meta:
+        db_table = 'trips_trip'
+        managed = False
+
+    def __str__(self):
+        locale.setlocale(locale.LC_TIME, "es_CO")
+        start_date = self.start_date.strftime('%b').title().strip('.')
+        end_date = self.end_date.strftime('%b').title().strip('.')
+        year = self.start_date.strftime('%Y')
+        date_string_short = f"({year})"
+        if start_date == end_date:
+            date_string = f"({start_date} {year})"
+        else:
+            date_string = f"({start_date}-{end_date} {year})"
+        if self.place != self.country:
+            text_string = f"{self.place}, {self.country[0:3].upper()} "
+        else:
+            text_string = f"{self.place} "
+        if len(text_string + date_string) >= 30:
+            return text_string + date_string_short
+        else:
+            return text_string + date_string
+
+    def operations(self):
+        ops = OperationCard.objects.filter(trip_id=self.id)
+        return ops
+
+    def num_operations(self):
+        return len(self.operations())
+
+    def total_amount(self):
+        amount = 0
+        for item in self.operations():
+            amount += item.amount
+        return amount
+
+
 class OperationBill(models.Model):
     bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
     date = models.DateField(null=False, blank=False)
@@ -94,7 +140,8 @@ class OperationCard(models.Model):
     amount = models.FloatField()
     entity = models.CharField(max_length=50)
     category = models.CharField(max_length=20, null=True, blank=True)
-    dues = models.IntegerField(default=1)
+    dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    trip = models.ForeignKey(Trip, null=True, blank=True, default=None, on_delete = models.CASCADE)
 
     def __str__(self):
         return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
@@ -111,6 +158,7 @@ class OperationAccount(models.Model):
     entity = models.CharField(max_length=50)
     category = models.CharField(max_length=20, null=True, blank=True)
     dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    trip = models.ForeignKey(Trip, null=True, blank=True, on_delete = models.CASCADE)
 
     def __str__(self):
         return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
@@ -124,3 +172,5 @@ class OperationCategories(models.Model):
 
     def __str__(self):
         return self.name
+
+

@@ -20,7 +20,7 @@ class RedirectToPreviousMixin:
         return self.request.session['previous_page']
 
 
-class CatEditView(LoginRequiredMixin, UpdateView):
+class CatEditView(LoginRequiredMixin, RedirectToPreviousMixin, UpdateView):
     template_name = 'categories/edit_cat.html'
     form_class = EditCatForm
     model = OperationCategories
@@ -31,8 +31,8 @@ class CatEditView(LoginRequiredMixin, UpdateView):
         context["title"] = "Edit item"
         return context
     
-    def get_success_url(self):
-        return reverse("categories:index")
+    # def get_success_url(self):
+    #     return reverse("categories:index")
 
 
 class CatIndexView(LoginRequiredMixin, ListView):

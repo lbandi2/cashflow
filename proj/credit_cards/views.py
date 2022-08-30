@@ -1,12 +1,15 @@
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
+from django.shortcuts import render
+
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 from datetime import datetime, timedelta
 import random
-import calendar
 
-from cashflow.models import Card, Account, Bill, OperationCard, OperationAccount, OperationBill, OperationCategories
+from cashflow.models import Card, Bill, OperationCard
 from .forms import EditOpForm
 
 
@@ -40,12 +43,51 @@ class OpUpdate(RedirectToPreviousMixin, UpdateView):
     form_class = EditOpForm
     model = OperationCard
 
-    def get_context_data(self):
-        context = super(OpUpdate, self).get_context_data()
-        context["obj"] = self.object
-        context["card"] = self.object.card
-        context["title"] = "Edit item"
-        return context
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(OpUpdate, self).get_context_data()
+    #     context["obj"] = self.object
+    #     context["card"] = self.object.card
+    # #     # context["form"] = ''
+    #     context["title"] = "Edit item"
+    #     context["trip_id"] = self.object.trip_id
+    # #     print("obj:", self.object)
+    # #     print("Trip:", self.object.trip)
+    # #     print("Trip ID:", self.object.trip_id)
+    # #     print("Trip is None: ", self.object.trip_id is None)
+    # #     # print(context)
+    # #     # print(context['view'])
+    #     return context
+
+    # def get(self, request, *args, **kwargs):
+    #     id_ = self.kwargs.get("pk")
+    #     trip = Trip.objects.get(id=id_)
+    #     operations = OperationCard.objects\
+    #         .filter(date__gte=trip.start_date - timedelta(days=3))\
+    #         .filter(date__lte=trip.end_date + timedelta(days=3))
+    #     operations_id = [op.id for op in operations]
+    #     print(self.kwargs)
+    #     return render(request, self.template_name, {
+    #                                                 'trip': id_,
+    #                                                 'operations': operations,
+    #                                                 'operations_id': operations_id,
+    #                                                 'form': EditOpForm(self)
+    #                                                 }
+    #                                             )
+
+    # def post(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     # print(request.POST)
+    #     # print("kwargs", self.kwargs)
+    #     if request.method == 'POST':
+    #         if 'trip_id' in request.POST:
+    #             if request.POST['trip_id'] != '':
+    #                 op = OperationCard.objects.get(pk=self.kwargs['pk'])
+    #                 op.trip_id = int(request.POST['trip_id'])
+    #             elif request.POST['trip_id'] == '':
+    #                 op = OperationCard.objects.get(pk=self.kwargs['pk'])
+    #                 op.trip_id = None
+    #             op.save()
+    #     return super().post(request, *args, **kwargs)
 
 
 class UnbilledSpending(ListView):
@@ -71,13 +113,50 @@ class UnbilledSpending(ListView):
         return ops
 
 
-class LastOpsView(LoginRequiredMixin, ListView):
-    model = OperationCard
-    template_name = 'credit_cards/last_ops.html'
-    login_url = 'home:login'
-    context_object_name = 'item_list'
-    queryset = OperationCard.objects.all().order_by('-date')
-    paginate_by = 15
+# class LastOpsView(LoginRequiredMixin, ListView):
+#     model = OperationCard
+#     template_name = 'credit_cards/last_ops.html'
+#     login_url = 'home:login'
+#     context_object_name = 'item_list'
+#     queryset = OperationCard.objects.all().order_by('-date')
+#     paginate_by = 15
+
+
+def LastOpsView(request, page):
+    query = OperationCard.objects.all().order_by('-date')
+    paginator = Paginator(query, per_page=15)
+    page_object = paginator.get_page(page)
+    page_object.adjusted_elided_pages = paginator.get_elided_page_range(page, on_each_side=1, on_ends=1)
+    context = {"page_obj": page_object}
+    return render(request, "credit_cards/last_ops.html", context)
+
+
+def LastOpsView_api(request):
+    page_number = request.GET.get("page", 1)
+    per_page = request.GET.get("per_page", 15)
+    query = OperationCard.objects.all().order_by('-date')
+    paginator = Paginator(query, per_page)
+    page_obj = paginator.get_page(page_number)
+    data = [
+        {
+            "date": kw.date,
+            "type": kw.type,
+            "entity": kw.entity,
+            "amount": kw.amount,
+            "category": kw.category
+        } 
+        for kw in page_obj.object_list]
+
+    payload = {
+        "page": {
+            "current": page_obj.number,
+            "has_next": page_obj.has_next(),
+            "has_previous": page_obj.has_previous(),
+        },
+        "data": data
+    }
+    return JsonResponse(payload)
+
 
 class LastOpsByDayView(LoginRequiredMixin, ListView):
     template_name = 'credit_cards/last_ops_by_day.html'

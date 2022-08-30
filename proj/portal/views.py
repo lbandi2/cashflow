@@ -24,7 +24,7 @@ class PortalView(LoginRequiredMixin, ListView):
     context_object_name = 'data'
 
     def get_queryset(self):
-        print(self.kwargs)
+        # print(self.kwargs)
 
         """Return the last five published values."""
         values = {
@@ -84,3 +84,11 @@ class PortalView(LoginRequiredMixin, ListView):
                 amount += item.amount / item.dues
         return amount
 
+
+class PortalSettings(LoginRequiredMixin, ListView):
+    template_name = 'portal/settings.html'
+    login_url = 'home:login'
+    context_object_name = 'data'
+
+    def get_queryset(self):
+        return {}

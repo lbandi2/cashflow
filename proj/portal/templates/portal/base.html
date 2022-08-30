@@ -51,6 +51,8 @@
                 height: 2.2em;
             }
         </style>
+        {% block js_head %}
+        {% endblock js_head %}
         
     </head>
     {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> {% endcomment %}
@@ -66,11 +68,11 @@
         <nav>
             <ul class="nav-cont">
                 <li class="nav-item"><button type="button" class="btn btn-light me-1" onclick=location.href="{% url 'portal:index' %}"><i class="material-icons">home</i></button></li>
-                <li class="nav-item"><button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'categories:index' %}"><i class="material-icons">label</i></button></li>
                 <li class="nav-item"><button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'dolar:index' %}"><i class="material-icons">show_chart</i></button></li>
                 <li class="nav-item"><button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'accounts:index' %}"><i class="material-icons">attach_money</i></button></li>
                 <li class="nav-item"><button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'credit_cards:index' %}"><i class="material-icons">credit_card</i></button></li>
                 {% comment %} <a href="{% url 'quotes:profile' %}" class="btn btn-outline-light me-1">{{ user.first_name }}</a> {% endcomment %}
+                <li class="nav-item"><button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'portal:settings' %}"><i class="material-icons">settings</i></button></li>
                 <li class="nav-item"><button type="button" class="btn btn-danger me-1" onclick=location.href="{% url 'home:logout' %}"><i class="material-icons">power_settings_new</i></button></li>
             </div>
         </nav>

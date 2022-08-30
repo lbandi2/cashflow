@@ -9,6 +9,13 @@
 
 {% block content %}
 
+{% comment %} {{form}} {% endcomment %}
+{{ trip }}
+{{ trip_id }}
+{% comment %} {{form.as_p}} {% endcomment %}
+
+{% comment %} {{ form }} {% endcomment %}
+
 <div class="form-group col col-md-5 mx-auto">
     <form method="post">
         {% csrf_token %}
@@ -20,41 +27,63 @@
             <label for="date">Fecha:</label>{{ form.date }}
         </p>
         <p>
-            <label for="date">Tipo:</label>{{ form.type }}
+            <label for="type">Tipo:</label>{{ form.type }}
         </p>
         <p>
-            <label for="date">Entidad:</label>{{ form.entity }}
+            <label for="entity">Entidad:</label>{{ form.entity }}
         </p>
         <p>
-            <label for="date">Monto:</label>{{ form.amount }}
+            <label for="amount">Monto:</label>{{ form.amount }}
         </p>
-        <div class="container">
+        <div class="container-responsive">
             <div class="row">
                 <div class="col-6 mx-auto">
                     <p>
-                        <label for="date">Categoría:</label>{{ form.category }}
+                        <label for="category">Categoría:</label>{{ form.category }}
                     </p>
                 </div>
                 <div class="col">
                     <br>
                     <p>
                         <input
-                        class="btn btn-warning me-1"
+                        class="btn btn-sm btn-warning me-1"
                         value="Crear"
                         type="button"
                         onclick="location.href='{% url "categories:add" %}'">
                     </p>
                 </div>
-                <div class="col">
+                <div class="col-3">
                     <p>
-                        <label for="date">Cuotas:</label>{{ form.dues }}
-                        </p>
-            
+                        <label for="dues">Cuotas:</label>{{ form.dues }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% comment %} <p>
+            <label for="trip">Viaje:</label>{{ form.trip }}
+        </p> {% endcomment %}
+
+        <div class="container-responsive">
+            <div class="row">
+                <div class="col-9 mx-auto">
+                    <p>
+                        <label for="trip">Viaje:</label>{{ form.trip }}
+                    </p>
+                </div>
+                <div class="col">
+                    <br>
+                    <p>
+                        <input
+                        class="btn btn-sm btn-warning me-1"
+                        value="Crear"
+                        type="button"
+                        onclick="location.href='{% url "trips:add" %}'">
+                    </p>
                 </div>
             </div>
         </div>
 
-        {% comment %} {{ form.as_p }} {% endcomment %}
+
         <br><br>
 
         <div class="container" align="center">

@@ -1,0 +1,15 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Otras opciones {% endblock %}
+
+{% block content %}
+
+<div class="my-5 container" align="center">
+
+    <a href="{% url 'categories:index' %}" class="btn btn-secondary me-1">&#127991; Categorías</a>
+
+    <a href="{% url 'trips:index' %}" class="btn btn-secondary me-1">&#128747; Viajes</a>
+
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from cashflow.models import OperationAccount, OperationCategories
+from cashflow.models import OperationAccount, OperationCategories, Trip
 
 from django import forms
 
@@ -12,11 +12,12 @@ class EditOpForm(ModelForm):
     type = forms.CharField(label='Tipo', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     amount = forms.FloatField(label='Monto', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     entity = forms.CharField(label='Entidad', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    category = forms.CharField(label='Categoría', max_length=20, widget=forms.Select(choices=CATEGORIES, attrs={'class': 'form-control'}))
+    category = forms.CharField(label='Categoría', max_length=20, widget=forms.Select(choices=CATEGORIES, attrs={'class': 'form-select'}))
+    trip = forms.ModelChoiceField(label='Viaje', required=False, queryset=Trip.objects.all(), widget=forms.Select(attrs={'class': 'form-select'}))
 
     class Meta:
         model = OperationAccount
-        fields = ('id', 'date', 'type', 'entity', 'amount', 'category')
+        fields = ('id', 'date', 'type', 'entity', 'amount', 'category', 'trip')
 
 # class PasswordForm(PasswordChangeForm):
 #     old_password = forms.CharField(label='Current password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))

@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from datetime import datetime, timedelta
 
-from cashflow.models import Card, Account, Bill, OperationCard, OperationAccount, OperationBill
+from cashflow.models import Bill, OperationAccount, OperationBill
 from .forms import EditBillOpForm
 
 
@@ -41,7 +41,6 @@ class CardsView(LoginRequiredMixin, ListView):
         return Bill.objects.order_by('-due_date').filter(is_paid=paid) # TODO: filter by card/account
 
     def get_queryset(self):
-        print(self.kwargs)
         return {
             "unpaid": self.get_bills(),
             "paid": self.get_bills(paid=1)
@@ -77,17 +76,18 @@ class CardsViewDetail(ListView):
         return context
 
 
-class BillOpViewDetail(LoginRequiredMixin, ListView):
+# class BillOpViewDetail(LoginRequiredMixin, ListView):
+class BillOpViewDetail(LoginRequiredMixin, UpdateView):
     template_name = 'bills/edit_bill_op.html'
-    # form_class = EditBillOpForm
+    form_class = EditBillOpForm
     model = OperationBill
-    context_object_name = 'item_list'
+    # context_object_name = 'item_list'
 
     def get_context_data(self):
         context = super(BillOpViewDetail, self).get_context_data()
         context["bill"] = Bill.objects.get(pk=self.kwargs["bill"])
         context["op_bill"] = OperationBill.objects.get(pk=self.kwargs["op_bill"])
-        # print(self.kwargs)
+        print(self.kwargs)
         return context
 
     def get_queryset(self):

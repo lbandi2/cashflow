@@ -26,4 +26,5 @@ urlpatterns = [
     path('credit_cards/', include('credit_cards.urls'), name='credit_cards'),
     path('bills/', include('bills.urls'), name='bills'),
     path('categories/', include('categories.urls'), name='categories'),
+    path('trips/', include('trips.urls'), name='trips'),
 ]

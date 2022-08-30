@@ -28,21 +28,44 @@
         <p>
             <label for="date">Monto:</label>{{ form.amount }}
         </p>
-        <div class="container">
+        <div class="container-responsive">
             <div class="row">
-                <div class="col">
+                <div class="col-9 mx-auto">
                     <p>
-                        <label for="date">Categoría:</label>{{ form.category }}
+                        <label for="category">Categoría:</label>{{ form.category }}
                     </p>
                 </div>
                 <div class="col">
                     <br>
                     <p>
                         <input
-                        class="btn btn-warning me-1"
+                        class="btn btn-sm btn-warning me-1"
                         value="Crear"
                         type="button"
                         onclick="location.href='{% url "categories:add" %}'">
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% comment %} <p>
+            <label for="trip">Viaje:</label>{{ form.trip }}
+        </p> {% endcomment %}
+
+        <div class="container-responsive">
+            <div class="row">
+                <div class="col-9 mx-auto">
+                    <p>
+                        <label for="trip">Viaje:</label>{{ form.trip }}
+                    </p>
+                </div>
+                <div class="col">
+                    <br>
+                    <p>
+                        <input
+                        class="btn btn-sm btn-warning me-1"
+                        value="Crear"
+                        type="button"
+                        onclick="location.href='{% url "trips:add" %}'">
                     </p>
                 </div>
             </div>

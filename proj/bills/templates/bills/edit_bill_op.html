@@ -15,6 +15,8 @@
 
 
 {{op_bill}}
+<br>
+{{bill}}
 
 {% for item in op_bill.items %}
     {{item}}
@@ -35,7 +37,12 @@
             class="btn btn-secondary me-1"
             value="Cancelar"
             type="button"
-            onclick="location.href='{% url "bills:index" %}'">
+            onclick="location.href='javascript:history.go(-1)'">
+        <input
+            class="btn btn-secondary me-1"
+            value="&#128270; Maps"
+            type="button"
+            onclick="window.open('https://timeline.google.com/maps/timeline?pb=!1m2!1m1!1s{{ object.date_string }}','_blank')">
     </form>
 </div>
 

@@ -1,0 +1,76 @@
+{% extends 'portal/base.html' %}
+
+{% load static %}
+
+{% load humanize %}
+
+{% block title %} Viajes {% endblock %}
+
+{% block content %}
+
+
+<div class="container my-5" align="center">
+    <a href="{% url 'trips:add' %}" class="btn btn-secondary">Agregar</a>
+</div>
+
+<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+    <div class="table">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Lugar</th>
+                <th scope="col">País</th>
+                <th scope="col">Desde</th>
+                <th scope="col">Hasta</th>
+                <th scope="col">Operaciones</th>
+                <th scope="col">Gasto</th>
+                <th scope="col">Pendiente</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in item_list.trips %}
+            <tr>
+                <td><a href="{% url 'trips:edit' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></a></td>
+                <td>{{ item.place }}</td>
+                <td>{{ item.country }}</td>
+                <td>{{ item.start_date | date:"Y-m-d" }}</td>
+                <td>{{ item.end_date | date:"Y-m-d" }}</td>
+                <td>{{ item.num_operations }}</td>
+                <td>{{ item.total_amount | floatformat:2 | intcomma }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+    <div class="table">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Lugar</th>
+                <th scope="col">País</th>
+                <th scope="col">Desde</th>
+                <th scope="col">Gasto</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in item_list.trips %}
+            <tr>
+                <td><a href="{% url 'trips:edit' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></a></td>
+                <td>{{ item.place }}</td>
+                <td>{{ item.country | slice:3 | upper }}</td>
+                <td>{{ item.start_date | date:"Y" }}</td>
+                <td>{{ item.total_amount | floatformat:2 | intcomma }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
