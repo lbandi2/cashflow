@@ -78,10 +78,15 @@ class Trip(models.Model):
     end_date = models.DateField()
     place = models.CharField(max_length=50)
     country = models.CharField(max_length=25)
+    car = models.BooleanField(default=False)
+    accomodation = models.CharField(max_length=50, null=True, blank=True) # choice (hotel, apt)
+    shopping = models.CharField(max_length=10, default=1, null=True, blank=True) # low/med/high
+    is_incomplete = models.BooleanField(default=False, blank=True, null=True)
+
 
     class Meta:
         db_table = 'trips_trip'
-        managed = False
+        managed = True
 
     def __str__(self):
         # locale.setlocale(locale.LC_TIME, "es_ES")
