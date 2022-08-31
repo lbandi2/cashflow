@@ -72,8 +72,8 @@ class TripEditView(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        checked_ops = [int(item.strip('_is_checked')) for item in list(request.POST.keys()) if 'is_checked' in item]
-        all_ops = [int(item) for item in request.POST['operations_id'].strip('[').strip(']').split(', ')]
+        checked_ops = {int(item.strip('_is_checked')) for item in list(request.POST.keys()) if 'is_checked' in item}
+        all_ops = {int(item) for item in request.POST['operations_id'].strip('[').strip(']').split(', ')}
         update_true = []
         update_false = []
         for item in all_ops:

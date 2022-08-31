@@ -37,12 +37,12 @@
             {{ form.as_p }}
         <br>
 
-        <div class="container d-none d-md-block mx-auto"> <!-- Desktop version -->
+        {% comment %} <div class="container d-none d-md-block mx-auto"> <!-- Desktop version --> {% endcomment %}
             <div class="my-3 container">
                 <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
             </div>
-            <div class="table">
-                <table class="table table-sm table-hover" style="width: 750px">
+            {% comment %} <div class="table">
+                <table class="table table-sm table-hover">
                 <thead>
                     <tr>
                         <th scope="col"></th>
@@ -64,6 +64,7 @@
                             </div>
                         </td>                            
                         <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                        <td>{{ item.date | date:"m-d" }}</td>
                         <td>{{ item.date | date:"Y-m-d H:m" }}</td>
                         <td>{{ item.entity }}</td>
                         <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
@@ -73,10 +74,49 @@
                 {% endfor %}
                 </tbody>
                 </table>
-            </div>
-        </div>
+            </div> {% endcomment %}
 
-        <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+
+
+
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Entidad</th>
+                        <th scope="col">Importe</th>
+                        <th scope="col" class="priority-3">Categoría</th>
+                        <th scope="col" class="priority-3">Cuotas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <input type="hidden" name="operations_id" value="{{ operations_id }}">
+                {% for item in operations %}
+                    <tr>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip %}True{% else %}False{% endif %}" name="{{ item.id }}_is_checked" class="user-action" {% if item.trip_id == trip %}checked{% endif %}>
+                            </div>
+                        </td>                            
+                        <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                        <td>{{ item.date | date:"m-d" }}</td>
+                        <td>{{ item.entity }}</td>
+                        <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                        <td class="priority-3">{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+                        <td class="priority-3">{{ item.dues }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+
+
+        {% comment %} </div> {% endcomment %}
+
+        {% comment %} <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
             <div class="my-3 container">
                 <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
             </div>
@@ -109,7 +149,7 @@
                 </tbody>
                 </table>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         
         <div class="container">
