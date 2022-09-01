@@ -69,7 +69,7 @@
                 <td>{{ item.date | date:"Y-m-d H:m" }}</td>
                 <td>{{ item.entity }}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-                <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+                <td>{% if item.category != None %}{{ item.category }}{% else %}-{% endif %}</td>
                 <td>{% if item.trip is not None %}{{ item.trip }}{% else %}-{% endif %}</td>
             </tr>
         {% endfor %}

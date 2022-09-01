@@ -49,7 +49,7 @@
                     <td>{{ entry.entity }}</td>
                     <td align="right">{{ entry.amount | floatformat:2 | intcomma }}</td>
                     {% comment %} <td>{% if entry.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ entry.account.owner }}</td> {% endcomment %}
-                    <td>{% if entry.category != ''%}{{ entry.category }}{% else %}-{% endif %}</td>
+                    <td>{% if entry.category != None %}{{ entry.category }}{% else %}-{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>

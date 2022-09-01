@@ -53,7 +53,7 @@
                         <td>{{ entry.date | date:"H:m" }}</td>
                         <td>{{ entry.entity }}</td>
                         <td class="currency" align="right">{{ entry.amount | floatformat:2 | intcomma }}</td>
-                        <td>{% if entry.category != ''%}{{ entry.category }}{% else %}-{% endif %}</td>
+                        <td>{% if entry.category != None %}{{ entry.category }}{% else %}-{% endif %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
