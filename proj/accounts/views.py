@@ -29,7 +29,7 @@ class IndexView(LoginRequiredMixin, ListView):
         queryset = {
             'last_ops': OperationAccount.objects.order_by('-date')[:5],
             'pending_bills': [],
-            'uncategorized_ops': OperationAccount.objects.order_by('-date').filter(category='')
+            'uncategorized_ops': OperationAccount.objects.order_by('-date').filter(category_id=None)
                     }
         return queryset
 

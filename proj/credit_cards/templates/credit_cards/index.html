@@ -90,19 +90,17 @@
     <table class="table table-sm table-hover">
     <thead>
         <tr>
-            <th scope="col"></th>
-            <th scope="col">Fecha</th>
-            {% comment %} <th scope="col">Tarjeta</th> {% endcomment %}
-            <th scope="col">Entidad</th>
-            <th scope="col">Importe</th>
-            <th scope="col">Categoría</th>
+            <th scope="col" class="col-1"></th>
+            <th scope="col" class="col-1">Fecha</th>
+            <th scope="col" class="col-2">Entidad</th>
+            <th scope="col" class="col-1 px-md-5">Importe</th>
+            <th scope="col" class="col-2">Categoría</th>
         </tr>
     </thead>
     <tbody>
     {% for item in item_list.last_ops %}
         <tr>
             <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
-            {% comment %} <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></a></td> {% endcomment %}
             <td>{{ item.date | date:"Y-m-d H:m" }}</td>
             <td>{{ item.entity }}</td>
             <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>

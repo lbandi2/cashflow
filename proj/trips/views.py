@@ -21,21 +21,6 @@ class RedirectToPreviousMixin:
         return self.request.session['previous_page']
 
 
-# class TripEditView(LoginRequiredMixin, RedirectToPreviousMixin, UpdateView):
-#     template_name = 'trips/edit_trip.html'
-#     form_class = EditTripForm
-#     model = Trip
-
-#     def get_context_data(self):
-#         context = super(TripEditView, self).get_context_data()
-#         context["obj"] = self.object
-#         context["title"] = "Edit item"
-#         context["trip"] = self.object.id
-#         context["operations"] = OperationCard.objects\
-#             .filter(date__gte=self.object.start_date - timedelta(days=3))\
-#             .filter(date__lte=self.object.end_date + timedelta(days=3))
-#         return context
-
 # class TripEditView(LoginRequiredMixin, RedirectToPreviousMixin, UpdateView): #TODO: redirect mixin goes back more than once, weird
 class TripEditView(LoginRequiredMixin, UpdateView):
     template_name = 'trips/edit_trip.html'
@@ -54,13 +39,7 @@ class TripEditView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         id_ = self.kwargs.get("pk")
         trip = Trip.objects.get(id=id_)
-        if trip.start_date < datetime.now().date():
-            operations = OperationCard.objects\
-                .filter(date__gte=trip.start_date - timedelta(days=3))\
-                .filter(date__lte=trip.end_date + timedelta(days=3))
-        else:
-            operations = OperationCard.objects.order_by('-date')\
-                .filter(date__gte=datetime.now() - timedelta(days=30))
+        operations = OperationCard.objects.order_by('-date').filter(trip_id=trip)
         operations_id = [op.id for op in operations]
         return render(request, self.template_name, {
                                                     'trip': trip.id,
@@ -84,7 +63,6 @@ class TripEditView(LoginRequiredMixin, UpdateView):
             elif item not in checked_ops and op.trip_id is not None:
                 op.trip_id = None
                 update_false.append(op.id)
-            # op.save()
         OperationCard.objects.filter(id__in=update_true).update(trip_id = self.object.id)
         OperationCard.objects.filter(id__in=update_false).update(trip_id = None)
         return super().post(request, *args, **kwargs)
@@ -96,22 +74,61 @@ class TripIndexView(LoginRequiredMixin, ListView):
     context_object_name = 'item_list'
 
     def get_queryset(self):
-        trips = Trip.objects.all()
+        trips = Trip.objects.all().order_by('-start_date')
         return {
             'trips': trips,
             }
 
 
+# class TripAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
+#     template_name = 'trips/add.html'
+#     form_class = AddTripForm
+#     model = Trip
+#     login_url = 'home:login'
+
+#     def get_context_data(self):
+#         context = super(TripAddView, self).get_context_data()
+#         context["title"] = "Agregar"
+#         return context
+
 class TripAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
-    template_name = 'trips/add.html'
+    template_name = 'trips/add_trip.html'
     form_class = AddTripForm
     model = Trip
-    login_url = 'home:login'
+    success_url = reverse_lazy('trips:index')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        checked_ops = {int(item.strip('_is_checked')) for item in list(form.data.keys()) if 'is_checked' in item}
+        all_ops = {int(item) for item in form.data['operations_id'].strip('[').strip(']').split(', ')}
+        update_true = []
+        update_false = []
+        for item in all_ops:
+            op = OperationCard.objects.get(pk=item)
+            if item in checked_ops and op.trip_id is None:
+                op.trip_id = self.object.id
+                update_true.append(op.id)
+            elif item not in checked_ops and op.trip_id is not None:
+                op.trip_id = None
+                update_false.append(op.id)
+        OperationCard.objects.filter(id__in=update_true).update(trip_id = self.object.id)
+        OperationCard.objects.filter(id__in=update_false).update(trip_id = None)
+        return HttpResponseRedirect(reverse_lazy('trips:index'))
 
     def get_context_data(self):
-        context = super(TripAddView, self).get_context_data()
-        context["title"] = "Agregar"
+        context = super(TripEditView, self).get_context_data()
         return context
+
+    def get(self, request, *args, **kwargs):
+        operations = OperationCard.objects.order_by('-date')\
+            .filter(date__gte=datetime.now() - timedelta(days=30))
+        operations_id = [op.id for op in operations]
+        return render(request, self.template_name, {
+                                                    'form': AddTripForm,
+                                                    'operations': operations,
+                                                    'operations_id': operations_id
+                                                    }
+                                                )
 
 
 class TripDeleteView(LoginRequiredMixin, DeleteView):

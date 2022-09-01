@@ -143,15 +143,24 @@ class OperationBill(models.Model):
     def get_absolute_url(self):
         return reverse("op_bill", args=[self.id])
 
+
+class OperationCategories(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
 class OperationCard(models.Model):
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
     date = models.DateTimeField()
     type = models.CharField(max_length=20)
     amount = models.FloatField()
     entity = models.CharField(max_length=50)
-    category = models.CharField(max_length=20, null=True, blank=True)
+    # category = models.CharField(max_length=20, null=True, blank=True)
+    category = models.ForeignKey(OperationCategories, null=True, blank=True, default=None, on_delete = models.SET_NULL)
     dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    trip = models.ForeignKey(Trip, null=True, blank=True, default=None, on_delete = models.CASCADE)
+    trip = models.ForeignKey(Trip, null=True, blank=True, default=None, on_delete = models.SET_NULL)
 
     def __str__(self):
         return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
@@ -166,7 +175,8 @@ class OperationAccount(models.Model):
     type = models.CharField(max_length=20)
     amount = models.FloatField()
     entity = models.CharField(max_length=50)
-    category = models.CharField(max_length=20, null=True, blank=True)
+    # category = models.CharField(max_length=20, null=True, blank=True)
+    category = models.ForeignKey(OperationCategories, null=True, blank=True, default=None, on_delete = models.SET_NULL)
     dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
     trip = models.ForeignKey(Trip, null=True, blank=True, on_delete = models.CASCADE)
 
@@ -177,10 +187,5 @@ class OperationAccount(models.Model):
         return self.date.strftime('%Y-%m-%d')
 
 
-class OperationCategories(models.Model):
-    name = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.name
 
 

@@ -27,7 +27,7 @@
 
 {% endblock js_head %}
 
-{% block title %} Editar viaje {% endblock title %}
+{% block title %} Agregar viaje {% endblock title %}
 
 {% block content %}
 
@@ -36,7 +36,7 @@
         {% csrf_token %}
             {{ form.as_p }}
         <br>
-        {% if operations %}
+
         {% comment %} <div class="container d-none d-md-block mx-auto"> <!-- Desktop version --> {% endcomment %}
             <div class="my-3 container">
                 <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
@@ -98,7 +98,7 @@
                     <tr>
                         <td>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip %}True{% else %}False{% endif %}" name="{{ item.id }}_is_checked" class="user-action" {% if item.trip_id == trip %}checked{% endif %}>
+                                <input class="form-check-input" type="checkbox" value="False" name="{{ item.id }}_is_checked" class="user-action">
                             </div>
                         </td>                            
                         <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
@@ -112,6 +112,7 @@
                 </tbody>
                 </table>
             </div>
+
 
         {% comment %} </div> {% endcomment %}
 
@@ -163,23 +164,17 @@
         </div>
 
         <br>
-        {% endif %}
 
         <div class="container" align="center">
             <input
                 class="btn btn-success me-1"
-                value="Actualizar"
+                value="Agregar"
                 type="submit">
             <input
                 class="btn btn-secondary me-1"
                 value="Cancelar"
                 type="button"
                 onclick="location.href='javascript:history.go(-1)'">
-            <input
-                class="btn btn-danger me-1"
-                value="Borrar"
-                type="button"
-                onclick="location.href='{% url 'trips:delete' trip %}'">
         </div>
 
 

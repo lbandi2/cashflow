@@ -21,17 +21,6 @@
     <div class="pagination">
         <div class="col-md-12" align="right">
             <span class="step-links">
-                {% comment %} {% for page_number in page_obj.paginator.get_elided_page_range %}
-                    {% if page_number == page_obj.paginator.ELLIPSIS %}
-                        {{ page_number }}
-                    {% elif page_obj.number == page_number %}
-                        <button type="button" class="btn btn-outline-secondary btn-sm">{{ page_number }}</button>
-                    {% else %}
-                        <a href="?page={{ page_number }}"
-                        class="btn btn-secondary btn-sm {% if page_number == page_obj.number %}current{% endif %}">
-                        {{page_number}}</a>
-                    {% endif %}
-                {% endfor %} {% endcomment %}
             {% for page_number in page_obj.adjusted_elided_pages %}
                 {% if page_number == page_obj.paginator.ELLIPSIS %}
                     {{page_number}}
@@ -70,10 +59,10 @@
                 <th scope="col">Entidad</th>
                 <th scope="col">Importe</th>
                 <th scope="col">Categoría</th>
+                <th scope="col">Viaje</th>
             </tr>
         </thead>
         <tbody>
-        {% comment %} {% for item in item_list %} {% endcomment %}
         {% for item in page_obj %}
             <tr>
                 <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
@@ -81,6 +70,7 @@
                 <td>{{ item.entity }}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
                 <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+                <td>{% if item.trip is not None %}{{ item.trip }}{% else %}-{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>
