@@ -1,11 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect
+# from django.http import HttpResponse, HttpResponseRedirect
 
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
-
-from datetime import datetime, timedelta
+# from django.urls import reverse, reverse_lazy
 
 from cashflow.models import Bill, OperationAccount, OperationBill
 from .forms import EditBillOpForm
@@ -85,27 +83,29 @@ class BillOpUpdate(RedirectToPreviousMixin, UpdateView):
     model = OperationBill
 
     def form_valid(self, form):
+        print(f"form.cleaned_data: \n{form.cleaned_data}")
         self.object = form.save()
         if form.has_changed():
             if form.cleaned_data['ops']:
                 bill_op = OperationBill.objects.get(pk=self.object.id)
                 bill = Bill.objects.get(pk=bill_op.bill_id)
-                bill_op.op_match = form.cleaned_data.get('ops')
-                bill_op.is_matched = True
+                if form.cleaned_data.get('ops'):
+                    bill_op.op_match = form.cleaned_data.get('ops')
+                    bill_op.is_matched = True
+                else:
+                    bill_op.op_match = None
+                    bill_op.is_matched = False
                 bill_op.save()
                 if len(bill.unmatched_bill_ops()) == 0:
                     bill.has_inconsistency = False
                     bill.save()
-        return HttpResponseRedirect(reverse_lazy('bills:credit_cards'))
+        # return HttpResponseRedirect(reverse_lazy('bills:credit_cards'))
+        return redirect('bills:credit_card_view', bill=bill_op.bill.id)
 
-    def get_context_data(self):
+    def get_context_data(self, **kwargs):
         context = super(BillOpUpdate, self).get_context_data()
-        op = OperationBill.objects.get(pk=self.kwargs["pk"])
-        context["op_bill"] = op
-        context["bill"] = op.bill
-        context["bill_card_ops_num"] = len(op.bill.unmatched_card_ops())
-        context["op_card"] = op.op_match
-        # print(self.kwargs)
+        context["bill_card_ops_num"] = len(self.object.bill.unmatched_card_ops())
+        print(f"context: \n{context}")
         return context
 
     # def get_queryset(self):
@@ -129,6 +129,12 @@ class BillOpUpdate(RedirectToPreviousMixin, UpdateView):
 #     def get_queryset(self):
 #         return OperationBill.objects.get(pk=self.kwargs["op_bill"])
 
+def billop_remove_cardop(request, **kwargs):
+    billop = OperationBill.objects.get(pk=kwargs['pk'])
+    billop.is_matched = False
+    billop.op_match = None
+    billop.save()
+    return redirect('bills:credit_card_view', bill=billop.bill.id)
 
 def bill_toggle_pay(request, pk):
     bill = Bill.objects.get(pk=pk)

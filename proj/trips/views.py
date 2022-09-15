@@ -62,8 +62,8 @@ class TripEditView(LoginRequiredMixin, UpdateView):
                 else:
                     operation.trip = None
                 operation.save()
-        return HttpResponseRedirect(reverse_lazy('trips:index'))
-
+        # return HttpResponseRedirect(reverse_lazy('trips:index'))
+        return redirect('trips:index')
 
 class TripAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
     template_name = 'trips/add_trip.html'

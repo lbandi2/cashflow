@@ -8,7 +8,7 @@
 
 {% block content %}
 
-{% for item in op_bill.items %}
+{% for item in object.items %}
     {{item}}
 {% endfor %}
 
@@ -31,43 +31,67 @@
         </p>
     {% endfor %}
 
-    <br><br>
+    <br>
 
-        <p class="fieldWrapper">
             {% if form.ops.value %}
-                {{ form.ops.errors }}
-                <label for="{{ form.ops.id_for_label }}">Operación asociada:</label>
-                {{ form.ops }}
+                <p class="fieldWrapper">
+                    {% comment %} {{ form.ops.errors }} {% endcomment %}
+                    <label for="{{ form.ops.id_for_label }}">Operación asociada:</label>
+                    {% comment %} {{ form.ops }} {% endcomment %}
+                    <div class="card border border-dark border-2 rounded">
+                        <div class="row container">
+                            <div class="col">
+                                <p>
+                                <br>
+                                <font size=4em>&#128197;</font> {{ object.op_match.date | date:"Y-m-d" }}<br>
+                                <font size=4em>&#127970;</font> {{ object.op_match.entity }}<br>
+                                <font size=4em>&#128181;</font> $ {{ object.op_match.amount | floatformat:2 | intcomma }}<br>
+                                <font size=4em>&#128179;</font> <img src="{% static 'images/cards/' %}{{ object.bill.card.brand }}.png" height=18px> {{ object.bill.card.number }}
+                                </p>
+                            </div>
+                            <div class="col d-flex align-items-center" align="right">
+                                <div class="container" align="right">
+                                <a href="{% url 'bills:billop_remove_cardop' object.bill.id object.id %}" class="btn btn-secondary btn-danger" type="submit">Quitar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    {% comment %} <a href="{% url 'bills:billop_remove_cardop' object.bill.id object.id %}" class="btn btn-secondary btn-danger" type="submit">Quitar</a> {% endcomment %}
+                    </p>
             {% else %}
-                {% if op_bill.type == 'expense' %}
+                {% if object.type == 'expense' %}
                     {% if bill_card_ops_num > 0 %}
-                        {{ form.ops.errors }}
-                        <label for="{{ form.ops.id_for_label }}">Operaciones del período sin equivalencia:</label>
-                        {{ form.ops }}
+                        <p class="fieldWrapper">
+                            {{ form.ops.errors }}
+                            <label for="{{ form.ops.id_for_label }}">Operaciones sin equivalencia:</label>
+                            {{ form.ops }}
+                        </p>
                     {% else %}
-                        <label for="{{ form.ops.id_for_label }}">Problema:</label>
-                        <p class="alert alert-danger">Este cargo no fue informado al momento de la transacción.</p>
+                        <p class="fieldWrapper">
+                            <label for="{{ form.ops.id_for_label }}">Problema:</label>
+                            <p class="alert alert-danger">Este cargo no fue informado al momento de la transacción.</p>
+                        </p>
                     {% endif %}
                 {% endif %}
             {% endif %}
-        </p>
 
-        <br>
-
-        <input
-            class="btn btn-secondary me-1"
-            value="Actualizar"
-            type="submit">
-        <input
-            class="btn btn-secondary me-1"
-            value="Cancelar"
-            type="button"
-            onclick="location.href='javascript:history.go(-1)'">
-        <input
-            class="btn btn-secondary me-1"
-            value="&#128270; Maps"
-            type="button"
-            onclick="window.open('https://timeline.google.com/maps/timeline?pb=!1m2!1m1!1s{{ object.date_string }}','_blank')">
+        <div class="container" align="center">
+            <input
+                class="btn btn-secondary me-1"
+                value="Actualizar"
+                type="submit">
+            <input
+                class="btn btn-secondary me-1"
+                value="Cancelar"
+                type="button"
+                onclick="location.href='javascript:history.go(-1)'">
+            <input
+                class="btn btn-secondary me-1"
+                value="&#128270; Maps"
+                type="button"
+                onclick="window.open('https://timeline.google.com/maps/timeline?pb=!1m2!1m1!1s{{ object.date_string }}','_blank')">
+        </div>
     </form>
 </div>
 

@@ -32,6 +32,11 @@ class EditBillOpForm(ModelForm):
             self.fields['ops'].queryset = card_ops.none()
         elif card_ops.filter(id=opbill.op_match_id):
             self.fields['ops'].queryset = card_ops.filter(id=opbill.op_match_id)
+            # self.fields['ops'] = forms.ModelChoiceField(label='Operaciones',
+            #     widget = forms.CheckboxSelectMultiple,
+            #     queryset = card_ops.filter(id=opbill.op_match_id),
+            #     required=False
+            # )
             self.fields['ops'].initial = [item.pk for item in card_ops.filter(id=opbill.op_match_id)]
         else:
             unmatched = bill.unmatched_card_ops()
