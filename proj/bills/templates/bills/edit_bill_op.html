@@ -38,19 +38,19 @@
                     <label for="{{ form.ops.id_for_label }}">Operación asociada:</label>
                     {% comment %} {{ form.ops }} {% endcomment %}
                     <div class="card border border-dark border-2 rounded">
-                        <div class="row container">
+                        <div class="container row">
                             <div class="col">
                                 <p>
-                                <br>
-                                <font size=4em>&#128197;</font> {{ object.op_match.date | date:"Y-m-d" }}<br>
-                                <font size=4em>&#127970;</font> {{ object.op_match.entity }}<br>
-                                <font size=4em>&#128181;</font> $ {{ object.op_match.amount | floatformat:2 | intcomma }}<br>
-                                <font size=4em>&#128179;</font> <img src="{% static 'images/cards/' %}{{ object.bill.card.brand }}.png" height=18px> {{ object.bill.card.number }}
+                                    <br>
+                                    <font size=4em>&#128197;</font> {{ object.op_match.date | date:"Y-m-d" }}<br>
+                                    <font size=4em>&#127970;</font> {{ object.op_match.entity }}<br>
+                                    <font size=4em>&#128181;</font> $ {{ object.op_match.amount | floatformat:2 | intcomma }}<br>
+                                    <font size=4em>&#128179;</font> <img src="{% static 'images/cards/' %}{{ object.bill.card.brand }}.png" height=18px> {{ object.bill.card.number }}
                                 </p>
                             </div>
-                            <div class="col d-flex align-items-center" align="right">
-                                <div class="container" align="right">
-                                <a href="{% url 'bills:billop_remove_cardop' object.bill.id object.id %}" class="btn btn-secondary btn-danger" type="submit">Quitar</a>
+                            <div class="col col-3 my-auto" align="right">
+                                <div class="container">
+                                    <a href="{% url 'bills:billop_remove_cardop' object.bill.id object.id %}" class="btn btn-secondary btn-danger" type="submit">Quitar</a>
                                 </div>
                             </div>
                         </div>
