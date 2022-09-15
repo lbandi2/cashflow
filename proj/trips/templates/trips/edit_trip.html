@@ -31,54 +31,60 @@
 
 {% block content %}
 
+
+
+
 <div class="form-group col col-md-7 mx-auto">
     <form method="post">
         {% csrf_token %}
-            {{ form.as_p }}
+            {% comment %} {{ form.as_p }} {% endcomment %}
+
+            {% for field in form %}
+                <p class="fieldWrapper">
+                    {% if 'Operaciones' not in field.label_tag %}
+                        {{ field.errors }}
+                        {{ field.label_tag }} {{ field }}
+                        {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    {% endif %}
+                </p>
+            {% endfor %}
+
+            {% if form.card_operations.value %}
+                <p class="fieldWrapper">
+                    {{ form.card_operations.errors }}
+                    <label for="{{ form.card_operations.id_for_label }}">Operaciones de tarjeta:</label>
+                    {{ form.card_operations }}
+                </p>
+            {% endif %}
+
+            {% if form.account_operations.value %}
+                <p class="fieldWrapper">
+                    {{ form.account_operations.errors }}
+                    <label for="{{ form.account_operations.id_for_label }}">Operaciones de cuenta:</label>
+                    {{ form.account_operations }}
+                </p>
+            {% endif %}
+
         <br>
+
+        <div class="container">
+            <input type="button" 
+                class="btn btn-primary btn-sm"
+                value="Ninguno" 
+                id="btnUncheckAll"/>
+            <input type="button" 
+                class="btn btn-primary btn-sm"
+                value="Todos" 
+                id="btnCheckAll"/>
+        </div>
+
+
         {% if operations %}
-        {% comment %} <div class="container d-none d-md-block mx-auto"> <!-- Desktop version --> {% endcomment %}
             <div class="my-3 container">
-                <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
+                <h5> Operaciones seleccionadas</h5>
             </div>
-            {% comment %} <div class="table">
-                <table class="table table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Entidad</th>
-                        <th scope="col">Importe</th>
-                        <th scope="col">Categoría</th>
-                        <th scope="col">Cuotas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <input type="hidden" name="operations_id" value="{{ operations_id }}">
-                {% for item in operations %}
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip %}True{% else %}False{% endif %}" name="{{ item.id }}_is_checked" class="user-action" {% if item.trip_id == trip %}checked{% endif %}>
-                            </div>
-                        </td>                            
-                        <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
-                        <td>{{ item.date | date:"m-d" }}</td>
-                        <td>{{ item.date | date:"Y-m-d H:m" }}</td>
-                        <td>{{ item.entity }}</td>
-                        <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-                        <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
-                        <td>{{ item.dues }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-                </table>
-            </div> {% endcomment %}
-
-
-
-
             <div class="table-responsive">
                 <table class="table table-sm table-hover">
                 <thead>
@@ -87,70 +93,35 @@
                         <th scope="col"></th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Entidad</th>
-                        <th scope="col">Importe</th>
+                        <th scope="col" class="px-md-5" style="text-align:right">Importe</th>
                         <th scope="col" class="priority-3">Categoría</th>
                         <th scope="col" class="priority-3">Cuotas</th>
                     </tr>
                 </thead>
                 <tbody>
-                <input type="hidden" name="operations_id" value="{{ operations_id }}">
                 {% for item in operations %}
                     <tr>
                         <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip %}True{% else %}False{% endif %}" name="{{ item.id }}_is_checked" class="user-action" {% if item.trip_id == trip %}checked{% endif %}>
-                            </div>
-                        </td>                            
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip.id %}True{% else %}False{% endif %}" name="{{ item.id }}_{% if item.card %}card{% else %}account{% endif %}_is_checked" class="user-action" {% if item.trip_id == trip.id %}checked{% endif %}>
+                        </div>
+                        </td>
+                    {% if item.card %}
                         <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                    {% elif item.account %}
+                        <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name }}</a></td>
+                    {% endif %}
                         <td>{{ item.date | date:"m-d" }}</td>
                         <td>{{ item.entity }}</td>
-                        <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-                        <td class="priority-3">{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
-                        <td class="priority-3">{{ item.dues }}</td>
+                        <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                        <td class="priority-3">{% if item.category != None %}{{ item.category }}{% else %}-{% endif %}</td>
+                        <td class="priority-3" style="text-align:center">{{ item.dues }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
                 </table>
             </div>
 
-        {% comment %} </div> {% endcomment %}
-
-        {% comment %} <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
-            <div class="my-3 container">
-                <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
-            </div>
-            <div class="table">
-                <table class="table table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Entidad</th>
-                        <th scope="col">Importe</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <input type="hidden" name="operations_id" value="{{ operations_id }}">
-                {% for item in operations %}
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip %}True{% else %}False{% endif %}" name="{{ item.id }}_is_checked" class="user-action" {% if item.trip_id == trip %}checked{% endif %}>
-                            </div>
-                        </td>                            
-                        <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
-                        <td>{{ item.date | date:"m-d" }}</td>
-                        <td>{{ item.entity | truncatechars:10 }}</td>
-                        <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-                </table>
-            </div>
-        </div> {% endcomment %}
-
-        
         <div class="container">
             <input type="button" 
                 class="btn btn-primary btn-sm"
@@ -179,7 +150,7 @@
                 class="btn btn-danger me-1"
                 value="Borrar"
                 type="button"
-                onclick="location.href='{% url 'trips:delete' trip %}'">
+                onclick="location.href='{% url 'trips:delete' trip.id %}'">
         </div>
 
 

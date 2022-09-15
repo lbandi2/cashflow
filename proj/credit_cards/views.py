@@ -43,52 +43,6 @@ class OpUpdate(RedirectToPreviousMixin, UpdateView):
     form_class = EditOpForm
     model = OperationCard
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super(OpUpdate, self).get_context_data()
-    #     context["obj"] = self.object
-    #     context["card"] = self.object.card
-    # #     # context["form"] = ''
-    #     context["title"] = "Edit item"
-    #     context["trip_id"] = self.object.trip_id
-    # #     print("obj:", self.object)
-    # #     print("Trip:", self.object.trip)
-    # #     print("Trip ID:", self.object.trip_id)
-    # #     print("Trip is None: ", self.object.trip_id is None)
-    # #     # print(context)
-    # #     # print(context['view'])
-    #     return context
-
-    # def get(self, request, *args, **kwargs):
-    #     id_ = self.kwargs.get("pk")
-    #     trip = Trip.objects.get(id=id_)
-    #     operations = OperationCard.objects\
-    #         .filter(date__gte=trip.start_date - timedelta(days=3))\
-    #         .filter(date__lte=trip.end_date + timedelta(days=3))
-    #     operations_id = [op.id for op in operations]
-    #     print(self.kwargs)
-    #     return render(request, self.template_name, {
-    #                                                 'trip': id_,
-    #                                                 'operations': operations,
-    #                                                 'operations_id': operations_id,
-    #                                                 'form': EditOpForm(self)
-    #                                                 }
-    #                                             )
-
-    # def post(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     # print(request.POST)
-    #     # print("kwargs", self.kwargs)
-    #     if request.method == 'POST':
-    #         if 'trip_id' in request.POST:
-    #             if request.POST['trip_id'] != '':
-    #                 op = OperationCard.objects.get(pk=self.kwargs['pk'])
-    #                 op.trip_id = int(request.POST['trip_id'])
-    #             elif request.POST['trip_id'] == '':
-    #                 op = OperationCard.objects.get(pk=self.kwargs['pk'])
-    #                 op.trip_id = None
-    #             op.save()
-    #     return super().post(request, *args, **kwargs)
-
 
 class UnbilledSpending(ListView):
     model = Card
@@ -214,7 +168,7 @@ class ChartsView(ListView):
 
     def chart_ops_range(self, date_start, date_end, top=0):
         res = {}
-        all_items = [item.category.title() if item.category != '' else 'Sin categoria' for item in list(OperationCard.objects.order_by('-date').filter(date__gte=date_start).filter(date__lt=date_end))]
+        all_items = [item.category.name.title() if item.category != None else 'Sin categoria' for item in list(OperationCard.objects.order_by('-date').filter(date__gte=date_start).filter(date__lt=date_end))]
         for item in all_items:
             res[item] = all_items.count(item)
         max_values = res
@@ -229,7 +183,7 @@ class ChartsView(ListView):
 
     def chart_all_ops(self, top=0):
         res = {}
-        all_items = [item.category.title() if item.category != '' else 'Sin categoria' for item in list(OperationCard.objects.all())]
+        all_items = [item.category.name.title() if item.category != None else 'Sin categoria' for item in list(OperationCard.objects.all())]
         for item in all_items:
             res[item] = all_items.count(item)
         max_values = res

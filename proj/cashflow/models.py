@@ -2,10 +2,12 @@ from django.db import models
 from django.urls import reverse
 
 # from trips.models import Trip
-import locale
+# import locale
+from datetime import datetime, timedelta
+from itertools import chain
 
 from django.core.validators import MaxValueValidator, MinValueValidator 
-
+from django.db.models import Q
 
 class Account(models.Model):
     bank = models.CharField(max_length=30)
@@ -62,15 +64,34 @@ class Bill(models.Model):
     def operations(self):
         return OperationBill.objects.filter(bill_id=self.id)
 
+    def card_operations(self):
+        return OperationCard.objects\
+                .filter(card=self.card)\
+                .filter(date__gte=self.start_date - timedelta(days=3))\
+                .filter(date__lte=self.end_date + timedelta(days=3))
+
     def is_checked(self):
         """Checks that all related operations are matched with mail operations"""
-        ops = [item.is_matched for item in self.operations()]
+        ops = [item.is_matched for item in self.operations().filter(type='expense')]
         return all(ops)
 
     def inconsistencies(self):
         """Returns the number of inconsistencies"""
-        matched = [item for item in self.operations() if item.is_matched]
-        return len(self.operations()) - len(matched)
+        matched = [item for item in self.operations() if item.is_matched and item.type == 'expense']
+        taxes = [item for item in self.operations() if item.type != 'expense']
+        return len(self.operations()) - len(matched) - len(taxes)
+
+    def unmatched_card_ops(self):
+        # matched = [item.op_match_id for item in self.operations() if item.op_match_id or item.type != 'expense']
+        matched = [item.op_match_id for item in OperationBill.objects.all() if item.op_match_id or item.type != 'expense']
+        return OperationCard.objects\
+                .exclude(id__in=matched)\
+                .filter(date__gte=self.start_date)\
+                .filter(date__lte=self.end_date)\
+                .filter(card=self.card)
+
+    def unmatched_bill_ops(self):
+        return self.operations().filter(is_matched=False).filter(type='expense')
 
 
 class Trip(models.Model):
@@ -107,9 +128,21 @@ class Trip(models.Model):
         else:
             return text_string + date_string
 
+    # def operations(self):
+    #     card_ops = OperationCard.objects.filter(trip_id=self.id)
+    #     account_ops = OperationAccount.objects.filter(trip_id=self.id)
+    #     return sorted(chain(card_ops, account_ops), key=lambda instance: instance.date, reverse=True)
+
+    def card_operations(self):
+        return OperationCard.objects.filter(trip_id=self.id).order_by('-date')
+
+    def account_operations(self):
+        return OperationAccount.objects.filter(trip_id=self.id).order_by('-date')
+
     def operations(self):
-        ops = OperationCard.objects.filter(trip_id=self.id)
-        return ops
+        # card_ops = OperationCard.objects.filter(trip_id=self.id)
+        # account_ops = OperationAccount.objects.filter(trip_id=self.id)
+        return self.card_operations().union(self.account_operations())
 
     def num_operations(self):
         return len(self.operations())
@@ -123,7 +156,56 @@ class Trip(models.Model):
     def daily_spend(self):
         days = (self.end_date - self.start_date).days
         return self.total_amount() / days
-        
+
+
+class OperationCategories(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+    def operations(self):
+        card_ops = OperationCard.objects.order_by('-date').filter(category=self.id)
+        account_ops = OperationAccount.objects.order_by('-date').filter(category=self.id)
+        return sorted(chain(card_ops, account_ops), key=lambda instance: instance.date, reverse=True)
+
+    def num_operations(self):
+        return len(self.operations())
+
+
+class OperationCard(models.Model):
+    card = models.ForeignKey(Card, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+    type = models.CharField(max_length=20)
+    amount = models.FloatField()
+    entity = models.CharField(max_length=50)
+    category = models.ForeignKey(OperationCategories, null=True, blank=True, default=None, on_delete = models.SET_NULL)
+    dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    trip = models.ForeignKey(Trip, null=True, blank=True, on_delete = models.SET_NULL)
+
+    def __str__(self):
+        return f"{self.date.strftime('%m-%d')} [{self.entity.upper()}] ${self.amount:,.2f}"
+
+    def date_string(self):
+        return self.date.strftime('%Y-%m-%d')
+
+
+class OperationAccount(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+    type = models.CharField(max_length=20)
+    amount = models.FloatField()
+    entity = models.CharField(max_length=50)
+    # category = models.CharField(max_length=20, null=True, blank=True)
+    category = models.ForeignKey(OperationCategories, null=True, blank=True, default=None, on_delete = models.SET_NULL)
+    dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    trip = models.ForeignKey(Trip, null=True, blank=True, on_delete = models.SET_NULL)
+
+    def __str__(self):
+        return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
+
+    def date_string(self):
+        return self.date.strftime('%Y-%m-%d')
 
 
 class OperationBill(models.Model):
@@ -139,53 +221,16 @@ class OperationBill(models.Model):
     deferred_balance = models.FloatField()
     dues = models.CharField(max_length=5)
     is_matched = models.BooleanField(default=False)
+    op_match = models.ForeignKey(OperationCard, null=True, blank=True, on_delete = models.SET_NULL)
+
+    # def get_absolute_url(self):
+    #     return reverse("op_bill", args=[self.id])
+
+    def __str__(self):
+        return f"{self.date.strftime('%m-%d')} [{self.name.upper()}] ${self.original_value:,.2f}"
 
     def get_absolute_url(self):
-        return reverse("op_bill", args=[self.id])
-
-
-class OperationCategories(models.Model):
-    name = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.name
-
-
-class OperationCard(models.Model):
-    card = models.ForeignKey(Card, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    type = models.CharField(max_length=20)
-    amount = models.FloatField()
-    entity = models.CharField(max_length=50)
-    # category = models.CharField(max_length=20, null=True, blank=True)
-    category = models.ForeignKey(OperationCategories, null=True, blank=True, default=None, on_delete = models.SET_NULL)
-    dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    trip = models.ForeignKey(Trip, null=True, blank=True, default=None, on_delete = models.SET_NULL)
-
-    def __str__(self):
-        return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
-
-    def date_string(self):
-        return self.date.strftime('%Y-%m-%d')
-
-
-class OperationAccount(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    type = models.CharField(max_length=20)
-    amount = models.FloatField()
-    entity = models.CharField(max_length=50)
-    # category = models.CharField(max_length=20, null=True, blank=True)
-    category = models.ForeignKey(OperationCategories, null=True, blank=True, default=None, on_delete = models.SET_NULL)
-    dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    trip = models.ForeignKey(Trip, null=True, blank=True, on_delete = models.CASCADE)
-
-    def __str__(self):
-        return f"{self.date} [{self.type.upper()}] {self.entity.upper()} ${self.amount:,.2f}"
-
-    def date_string(self):
-        return self.date.strftime('%Y-%m-%d')
-
-
-
+        return reverse(
+            "bill_op_view", args=[str(self.bill.id), str(self.id)]
+        )
 

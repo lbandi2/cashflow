@@ -12,12 +12,13 @@
     <a href="{% url 'categories:add' %}" class="btn btn-secondary btn-sm">Agregar</a>
 </div>
 
-    <div class="table">
+    <div class="col col-md-7 mx-auto">
         <table class="table table-sm table-hover">
         <thead>
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Nombre</th>
+                <th scope="col" style="text-align:center">Operaciones</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +26,7 @@
             <tr>
                 <td><a href="{% url 'categories:edit' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
                 <td>{{ item.name }}</td>
+                <td style="text-align:center">{{ item.num_operations }}</td>
             </tr>
         {% endfor %}
         </tbody>

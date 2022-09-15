@@ -8,39 +8,9 @@
 
 {% block content %}
 
-<div class="container">
-    {% comment %} <div class="filters" align="center">
-        Filtrar por
-        <a href="#" class="btn btn-outline-secondary btn-sm">Tabla</a>
-        <a href="{% url 'credit_cards:last_ops_by_day' %}" class="btn btn-secondary btn-sm">Día</a>
-        <a href="{% url 'credit_cards:last_ops_by_card' %}" class="btn btn-secondary btn-sm">Tarjeta</a>
-    </div> {% endcomment %}
-
 <br>
 
-    <div class="pagination">
-        <div class="col-md-12" align="right">
-            <span class="step-links">
-                {% for page_number in page_obj.paginator.get_elided_page_range %}
-                    {% if page_number == page_obj.paginator.ELLIPSIS %}
-                        {{ page_number }}
-                    {% elif page_obj.number == page_number %}
-                        <button type="button" class="btn btn-outline-secondary btn-sm">{{ page_number }}</button>
-                    {% else %}
-                        <a href="?page={{ page_number }}"
-                        class="btn btn-secondary btn-sm {% if page_number == page_obj.number %}current{% endif %}">
-                        {{page_number}}</a>
-                    {% endif %}
-                        {% comment %} <a href="?page={{ item }}" class="btn btn-secondary btn-sm">{{ item }}</a> {% endcomment %}
-                {% endfor %}
-            </span>
-        </div>
-    </div>
-</div>
-
-<br>
-
-<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+<div class="container d-none d-md-block" style="width: 900px"> <!-- Desktop version -->
     <div class="table-responsive">
         <table class="table table-striped table-hover">
         <thead>
@@ -60,7 +30,7 @@
                 <td>{{ item.date | date:"Y-m-d H:m" }}</td>
                 <td>{{ item.entity }}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-                <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+                <td>{% if item.category != ''%}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
                 <td>{{ item.dues }}</td>
             </tr>
         {% endfor %}

@@ -12,16 +12,16 @@
 
     <a href="{% url 'accounts:last_ops' %}" class="btn btn-dark me-1">Ultimos movimientos</a>
 
-    <a href="{% url 'bills:accounts' %}" class="btn btn-dark me-1">Resúmenes</a>
+    {% comment %} <a href="{% url 'bills:accounts' %}" class="btn btn-dark me-1">Resúmenes</a> {% endcomment %}
 
 </div>
 
-<div class="my-3 container">
+<div class="my-3 container" style="width: 900px">
     <h4>&#128181; Movimientos</h4>
 </div>
 
-<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
-    <table class="table table-hover">
+<div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
+    <table class="table table-sm table-hover">
     <thead>
         <tr>
             <th scope="col"></th>
@@ -37,8 +37,8 @@
             <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink text-decoration-none link-dark"><img src="{% static 'images/' %}{{ item.account.bank }}-logo.png" height=18px> {{ item.account.name }}</a></td>
             <td>{{ item.date | date:"Y-m-d H:m" }}</td>
             <td>{{ item.entity }}</td>
-            <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
-            <td>{% if item.category != ''%}{{ item.category }}{% else %}-{% endif %}</td>
+            <td class="px-md-3" style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
+            <td>{% if item.category != None %}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
         </tr>
     {% endfor %}
     </tbody>
@@ -70,71 +70,12 @@
 
 <br>
 
-{% if item_list.pending_bills %}
-    <div class="my-3 container">
-        <h4>&#9200; Resúmenes pendientes</h4>
-    </div>
-
-    <div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
-        <div class="table-responsive">
-            <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Factura</th>
-                    <th scope="col">Cuenta</th>
-                    <th scope="col">Titular</th>
-                    <th scope="col" style="text-align:center">Verificado</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for item in item_list.pending_bills %}
-                    <tr>
-                    <td><a href="{% url 'bills:account_view' item.pk %}" class="rowlink text-decoration-none">&#x1F50D;</td>
-                    <td>&#x1F4C3; {{ item.bill_id }}</td>
-                    <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td>
-                    <td>{{ item.card.name }}</td>
-                    <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
-        <div class="table-responsive">
-            <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Cuenta</th>
-                    <th scope="col" style="text-align:center">Verif.</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for item in item_list.pending_bills %}
-                    <tr>
-                    <td><a href="{% url 'bills:account_view' item.pk %}" class="rowlink text-decoration-none">&#x1F50D;</td>
-                    <td>{{ item.account.owner }}</td>
-                    <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            </table>
-        </div>
-    </div>
-
-{% endif %}
-
-<br>
-
 {% if item_list.uncategorized_ops %}
-<div class="my-3 container">
+<div class="my-3 container" style="width: 900px">
     <h4>&#x1F4DD; Movimientos sin categorizar</h4>
 </div>
 
-<div class="container-fluid d-none d-md-block">  <!-- Desktop version -->
+<div class="container-fluid d-none d-md-block" style="width: 800px">  <!-- Desktop version -->
 
     <div class="table-responsive">
         <table class="table table-sm table-hover">

@@ -9,15 +9,59 @@
 
 {% block content %}
 
-{% comment %} {{card}}
-
-{{obj}} {% endcomment %}
-
 <div class="form-group col col-md-5 mx-auto">
     <form method="post">
         {% csrf_token %}
             {{ form.as_p }}
         <br>
+
+        {% if obj.operations %}
+
+        <div class="my-3 container">
+            <h5> Operaciones con esta categoría </h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Entidad</th>
+                    <th scope="col">Importe</th>
+                    <th scope="col" class="priority-3">Cuotas</th>
+                </tr>
+            </thead>
+            <tbody>
+            <input type="hidden" name="card_operations_id" value="{{ card_operations_id }}">
+            <input type="hidden" name="account_operations_id" value="{{ account_operations_id }}">
+            {% for item in obj.operations %}
+                <tr>
+                    <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="{% if item.category.id == obj.id %}True{% else %}False{% endif %}" name="{{ item.id }}_{% if item.card %}card{% else %}account{% endif %}_is_checked" class="user-action" {% if item.category.id == obj.id %}checked{% endif %}>
+                    </div>
+                    </td>                            
+                {% if item.card %}
+                    <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                {% elif item.account %}
+                    <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name }}</a></td>
+                {% endif %}
+                    <td>{{ item.date | date:"m-d" }}</td>
+                    <td>{{ item.entity }}</td>
+                    <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                    <td class="priority-3" style="text-align:center">{{ item.dues }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+
+        {% endif %}
+
+
+
         <div class="container" align="center">
             <input
                 class="btn btn-secondary me-1"
@@ -28,6 +72,11 @@
                 value="Cancelar"
                 type="button"
                 onclick="location.href='javascript:history.go(-1)'">
+            <input
+                class="btn btn-danger me-1"
+                value="Borrar"
+                type="button"
+                onclick="location.href='{% url 'categories:delete' obj.id %}'">
         </div>
     </form>
 </div>

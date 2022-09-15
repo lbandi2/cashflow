@@ -39,7 +39,7 @@
 
         {% comment %} <div class="container d-none d-md-block mx-auto"> <!-- Desktop version --> {% endcomment %}
             <div class="my-3 container">
-                <h5> Operaciones del {{ operations.last.date | date:"Y-m-d" }} al {{ operations.0.date | date:"Y-m-d" }}</h5>
+                <h5> Operaciones de los últimos 30 días</h5>
             </div>
             {% comment %} <div class="table">
                 <table class="table table-sm table-hover">
@@ -93,15 +93,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                <input type="hidden" name="operations_id" value="{{ operations_id }}">
+                <input type="hidden" name="card_operations_id" value="{{ card_operations_id }}">
+                <input type="hidden" name="account_operations_id" value="{{ account_operations_id }}">
                 {% for item in operations %}
                     <tr>
                         <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="False" name="{{ item.id }}_is_checked" class="user-action">
-                            </div>
-                        </td>                            
-                        <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{% if item.trip_id == trip.id %}True{% else %}False{% endif %}" name="{{ item.id }}_{% if item.card %}card{% else %}account{% endif %}_is_checked" class="user-action">
+                        </div>
+                        </td>
+                        {% if item.card %}
+                            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                        {% elif item.account %}
+                            <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name }}</a></td>
+                        {% endif %}
                         <td>{{ item.date | date:"m-d" }}</td>
                         <td>{{ item.entity }}</td>
                         <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>

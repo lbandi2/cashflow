@@ -13,20 +13,20 @@
     <a href="{% url 'trips:add' %}" class="btn btn-secondary">Agregar</a>
 </div>
 
-<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+<div class="container-fluid d-none d-md-block" align="center"> <!-- Desktop version -->
     <div class="table">
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover" style="width: 900px">
         <thead>
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Lugar</th>
                 <th scope="col">País</th>
-                <th scope="col">Desde</th>
-                <th scope="col">Hasta</th>
-                <th scope="col">Operaciones</th>
-                <th scope="col" style="text-align:right">Total</th>
-                <th scope="col" style="text-align:right">Por día</th>
-                <th scope="col" style="text-align:right">Pendiente</th>
+                <th scope="col" style="text-align:center">Desde</th>
+                <th scope="col" style="text-align:center">Hasta</th>
+                <th scope="col" style="text-align:center">Operaciones</th>
+                <th scope="col" style="text-align:center">Total</th>
+                <th scope="col" style="text-align:center">Por día</th>
+                {% comment %} <th scope="col" style="text-align:right">Pendiente</th> {% endcomment %}
             </tr>
         </thead>
         <tbody>
@@ -35,12 +35,12 @@
                 <td><a href="{% url 'trips:edit' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></a></td>
                 <td>{{ item.place }}</td>
                 <td>{{ item.country }}</td>
-                <td>{{ item.start_date | date:"Y-m-d" }}</td>
-                <td>{{ item.end_date | date:"Y-m-d" }}</td>
-                <td>{{ item.num_operations }}</td>
-                <td style="text-align:right">{{ item.total_amount | floatformat:2 | intcomma }}</td>
-                <td style="text-align:right">{{ item.daily_spend | floatformat:2 | intcomma }}</td>
-                <td></td>
+                <td style="text-align:center">{{ item.start_date | date:"Y-m-d" }}</td>
+                <td style="text-align:center">{{ item.end_date | date:"Y-m-d" }}</td>
+                <td style="text-align:center">{{ item.num_operations }}</td>
+                <td class="px-md-3" style="text-align:right">{{ item.total_amount | floatformat:2 | intcomma }}</td>
+                <td class="px-md-3" style="text-align:right">{{ item.daily_spend | floatformat:2 | intcomma }}</td>
+                {% comment %} <td></td> {% endcomment %}
             </tr>
         {% endfor %}
         </tbody>

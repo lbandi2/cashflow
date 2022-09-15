@@ -1,4 +1,4 @@
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
@@ -30,9 +30,12 @@ class CatEditView(LoginRequiredMixin, RedirectToPreviousMixin, UpdateView):
         context["obj"] = self.object
         context["title"] = "Edit item"
         return context
-    
-    # def get_success_url(self):
-    #     return reverse("categories:index")
+
+
+class CatDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'trips/delete.html'
+    model = OperationCategories
+    success_url = reverse_lazy('categories:index')
 
 
 class CatIndexView(LoginRequiredMixin, ListView):
