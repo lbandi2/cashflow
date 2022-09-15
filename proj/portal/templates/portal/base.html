@@ -121,27 +121,7 @@
         {% endblock navbar %}
 
     <div class="my-3 container" align="center">
-        <div class="row">
-            <div class="col-1">
-                {% block back %}
-                    <div class="col-md-12" align="left">
-                        <a href="javascript:history.go(-1)"><img src={% static '/images/arrow-back.png' %} height=35px></a>
-                    </div>
-                {% endblock back %}
-            </div>
-            <div class="col-10">
-
-                {% comment %} <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item link-dark text-decoration-none"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Library</li>
-                    </ol>
-                </nav> {% endcomment %}
-
-
-                <h1>{% block title %} Title {% endblock %}</h1>
-            </div>
-        </div>
+        {% block title %} Title {% endblock %}
     </div>
 
     <div class="my-3 container">

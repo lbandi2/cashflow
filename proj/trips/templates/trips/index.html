@@ -4,7 +4,20 @@
 
 {% load humanize %}
 
-{% block title %} Viajes {% endblock %}
+{% comment %} {% block title %} Viajes {% endblock %} {% endcomment %}
+
+{% block title %}
+
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:settings' %}">Opciones</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Viajes</li>
+    </ol>
+</div>
+
+{% endblock title %}
+
 
 {% block content %}
 

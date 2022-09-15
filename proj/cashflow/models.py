@@ -38,6 +38,9 @@ class Card(models.Model):
     def __str__(self):
         return f"[{self.type.upper()}] {self.brand.upper()} {self.tier.title() if self.tier else ''}{'Corporate' if self.account.is_corporate else ''} {self.number} - {self.owner}"
 
+    def show_name(self):
+        return f"{self.brand.upper()[:6]} {self.tier.title() if self.tier else ''}{'Corporate' if self.account.is_corporate else ''} {self.number}"
+
     def bills(self):
         return Bill.objects.filter(id=self.id)
 

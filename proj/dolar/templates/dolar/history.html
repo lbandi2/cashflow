@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %} Histórico 
+{% comment %} {% block title %} Histórico 
     {% if quote_list.values.0.currency == 'cop' %}
         COP
     {% elif quote_list.values.0.name|length <= 4 %}
@@ -10,7 +10,29 @@
     {% else %}
         {{ quote_list.values.0.name|title }}
     {% endif %} 
+{% endblock title %} {% endcomment %}
+
+{% block title %}
+
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'dolar:index' %}">Cotizaciones</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Histórico</li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {% if quote_list.values.0.currency == 'cop' %}
+                COP
+            {% elif quote_list.values.0.name|length <= 4 %}
+                {{ quote_list.values.0.name|upper }}
+            {% else %}
+                {{ quote_list.values.0.name|title }}
+            {% endif %} 
+        </li>
+    </ol>
+</div>
+
 {% endblock title %}
+
 
 {% block content %}
 

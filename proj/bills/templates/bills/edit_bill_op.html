@@ -4,7 +4,22 @@
 
 {% load humanize %}
 
-{% block title %} Editar operación {% endblock title %}
+{% comment %} {% block title %} Editar operación {% endblock title %} {% endcomment %}
+
+{% block title %}
+
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">...</li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'bills:credit_cards' %}">Resúmenes</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'bills:credit_card_view' object.bill.id %}">{{object.bill.bill_id}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+    </ol>
+</div>
+
+{% endblock title %}
+
 
 {% block content %}
 

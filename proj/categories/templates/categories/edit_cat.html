@@ -5,7 +5,18 @@
 
 {% load humanize %}
 
-{% block title %} Editar categoría {% endblock title %}
+{% comment %} {% block title %} Editar categoría {% endblock title %} {% endcomment %}
+
+{% block title %}
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:settings' %}">Opciones</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'categories:index' %}">Categorías</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+    </ol>
+</div>
+{% endblock title %}
 
 {% block content %}
 

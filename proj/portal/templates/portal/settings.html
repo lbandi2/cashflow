@@ -1,6 +1,18 @@
 {% extends 'portal/base.html' %}
 
-{% block title %} Otras opciones {% endblock %}
+{% comment %} {% block title %} Otras opciones {% endblock %} {% endcomment %}
+
+{% block title %}
+
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Opciones</li>
+    </ol>
+</div>
+
+{% endblock title %}
+
 
 {% block content %}
 

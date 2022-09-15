@@ -4,7 +4,24 @@
 
 {% load humanize %}
 
-{% block title %} Detalle de resumen<br><h5>Período: {{ bill.start_date | date:"m/d" }} a {{ bill.end_date | date:"m/d" }} de {{ bill.end_date | date:"Y" }} </h5> {% endblock title %}
+{% comment %} {% block title %} Detalle de resumen<br><h5>Período: {{ bill.start_date | date:"m/d" }} a {{ bill.end_date | date:"m/d" }} de {{ bill.end_date | date:"Y" }} </h5> {% endblock title %} {% endcomment %}
+
+{% block title %}
+
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'bills:credit_cards' %}">Resúmenes</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{bill.bill_id}}</li>
+    </ol>
+</div>
+
+<h5>Período: {{ bill.start_date | date:"m/d" }} a {{ bill.end_date | date:"m/d" }} de {{ bill.end_date | date:"Y" }} </h5>
+<br>
+
+{% endblock title %}
+
 
 {% block content %}
 

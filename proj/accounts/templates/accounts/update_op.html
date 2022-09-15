@@ -5,7 +5,21 @@
 
 {% load humanize %}
 
-{% block title %} Editar operación {% endblock title %}
+{% comment %} {% block title %} Editar operación {% endblock title %} {% endcomment %}
+
+{% block title %}
+
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'accounts:index' %}">Cuentas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+    </ol>
+</div>
+
+{% endblock title %}
+
 
 {% block content %}
 

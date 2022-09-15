@@ -4,7 +4,19 @@
 
 {% load humanize %}
 
-{% block title %} Resúmenes de tarjetas de crédito {% endblock title %}
+{% comment %} {% block title %} Resúmenes de tarjetas de crédito {% endblock title %} {% endcomment %}
+
+{% block title %}
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Resúmenes</li>
+    </ol>
+</div>
+
+{% endblock title %}
 
 {% block content %}
 

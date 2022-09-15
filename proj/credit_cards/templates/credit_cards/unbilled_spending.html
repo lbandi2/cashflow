@@ -4,7 +4,19 @@
 
 {% load humanize %}
 
-{% block title %} Movimientos sin liquidar {% endblock title %}
+{% comment %} {% block title %} Movimientos sin liquidar {% endblock title %} {% endcomment %}
+
+{% block title %}
+
+<div class="container" align="center">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Parcial</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ item_list.0.card.show_name }}</li>
+    </ol>
+</div>
+
+{% endblock title %}
 
 {% block content %}
 
