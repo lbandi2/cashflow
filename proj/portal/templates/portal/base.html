@@ -103,8 +103,11 @@
 <body>
     {% block navbar %} 
 
-        <nav>
-            <ul class="nav-cont">
+        <nav class="navbar nav-cont sticky-top justify-content-center navbar-dark">
+            <ul class="nav">
+                {% if request.path != '/portal/' %}                
+                    <li class="nav-item" style="padding-right:0.5rem"><button type="button" class="btn btn-primary me-1" onclick=location.href='javascript:history.go(-1)'><i class="material-icons">chevron_left</i></button></li>
+                {% endif %}
                 <li class="nav-item"><button type="button" class="btn btn-light me-1" onclick=location.href="{% url 'portal:index' %}"><i class="material-icons">home</i></button></li>
                 <li class="nav-item"><button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'dolar:index' %}"><i class="material-icons">show_chart</i></button></li>
                 <li class="nav-item"><button type="button" class="btn btn-secondary me-1" onclick=location.href="{% url 'accounts:index' %}"><i class="material-icons">attach_money</i></button></li>

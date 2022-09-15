@@ -17,42 +17,48 @@
 </div>
 
 {% if item_list.pending_bills %}
-    <div class="my-3 container" style="width: 900px">
-        <h4>&#9200; Resúmenes pendientes</h4>
-    </div>
+    <div class="container-fluid d-none d-md-block">
+        <div class="my-3 container" style="width: 900px">
+            <h4>&#9200; Resúmenes pendientes</h4>
+        </div>
 
-    <div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
-        <div class="table-responsive">
-            <table class="table table-sm table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Tarjeta</th>
-                    <th scope="col">Factura</th>
-                    <th scope="col" style="text-align:center"></th>
-                    <th scope="col">Titular</th>
-                    <th scope="col" style="text-align:center">Vence</th>
-                    <th scope="col" style="text-align:center">Pago</th>
-                    <th scope="col" style="text-align:center">Pago total</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for item in item_list.pending_bills %}
+        <div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                <thead>
                     <tr>
-                    <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
-                    <td>&#x1F4C3; {{ item.bill_id }}</td>
-                    <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
-                    <td>{{ item.card.name }}</td>
-                    <td style="text-align:center">{{ item.due_date | date:"Y-m-d" }}</td>
-                    <td align="right">{{ item.min_pay | floatformat:2 | intcomma }}</td>
-                    <td align="right">{{ item.total_pay | floatformat:2 | intcomma }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            </table>
+                        <th scope="col">Tarjeta</th>
+                        <th scope="col">Factura</th>
+                        <th scope="col" style="text-align:center"></th>
+                        <th scope="col">Titular</th>
+                        <th scope="col" style="text-align:center">Vence</th>
+                        <th scope="col" style="text-align:center">Pago</th>
+                        <th scope="col" style="text-align:center">Pago total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in item_list.pending_bills %}
+                        <tr>
+                        <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                        <td>&#x1F4C3; {{ item.bill_id }}</td>
+                        <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
+                        <td>{{ item.card.name }}</td>
+                        <td style="text-align:center">{{ item.due_date | date:"Y-m-d" }}</td>
+                        <td align="right">{{ item.min_pay | floatformat:2 | intcomma }}</td>
+                        <td align="right">{{ item.total_pay | floatformat:2 | intcomma }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+        <div class="my-3 container">
+            <h4>&#9200; Resúmenes pendientes</h4>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-sm table-hover">
             <thead>
@@ -82,36 +88,42 @@
 
 <br>
 
-<div class="my-3 container" style="width: 900px">
-    <h4>&#x1F4B3; Movimientos</h4>
-</div>
+<div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
+    <div class="my-3 container" style="width: 900px">
+        <h4>&#x1F4B3; Movimientos</h4>
+    </div>
 
-<div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
-    <table class="table table-sm table-hover">
-    <thead>
-        <tr>
-            <th scope="col" class="col-1"></th>
-            <th scope="col" class="col-2">Fecha</th>
-            <th scope="col" class="col-2">Entidad</th>
-            <th scope="col" class="col-1 px-md-5">Importe</th>
-            <th scope="col" class="col-1" style="text-align:center">Categoría</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for item in item_list.last_ops %}
-        <tr>
-            <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
-            <td>{{ item.date | date:"Y-m-d H:m" }}</td>
-            <td>{{ item.entity }}</td>
-            <td style="text-align:right" class="col-1 px-md-5">{{ item.amount | floatformat:2 | intcomma }}</td>
-            <td>{% if item.category != ''%}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-    </table>
+    <div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col" class="col-1"></th>
+                <th scope="col" class="col-2">Fecha</th>
+                <th scope="col" class="col-2">Entidad</th>
+                <th scope="col" class="col-1 px-md-5">Importe</th>
+                <th scope="col" class="col-1" style="text-align:center">Categoría</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in item_list.last_ops %}
+            <tr>
+                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                <td>{{ item.date | date:"Y-m-d H:m" }}</td>
+                <td>{{ item.entity }}</td>
+                <td style="text-align:right" class="col-1 px-md-5">{{ item.amount | floatformat:2 | intcomma }}</td>
+                <td>{% if item.category != ''%}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
+    <div class="my-3 container">
+        <h4>&#x1F4B3; Movimientos</h4>
+    </div>
+
     <table class="table table-sm table-hover">
     <thead>
         <tr>
