@@ -34,9 +34,7 @@
 
             {% if form.ops.value %}
                 <p class="fieldWrapper">
-                    {% comment %} {{ form.ops.errors }} {% endcomment %}
                     <label for="{{ form.ops.id_for_label }}">Operación asociada:</label>
-                    {% comment %} {{ form.ops }} {% endcomment %}
                     <div class="card border border-dark border-2 rounded">
                         <div class="container row">
                             <div class="col">
@@ -56,8 +54,7 @@
                         </div>
                     </div>
                     <br>
-                    {% comment %} <a href="{% url 'bills:billop_remove_cardop' object.bill.id object.id %}" class="btn btn-secondary btn-danger" type="submit">Quitar</a> {% endcomment %}
-                    </p>
+                </p>
             {% else %}
                 {% if object.type == 'expense' %}
                     {% if bill_card_ops_num > 0 %}
