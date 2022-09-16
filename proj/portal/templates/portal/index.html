@@ -307,7 +307,7 @@
                 <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %} {{ item.account.name }}</a></td>
                 {% endif %}
                 <td>{{ item.date | date:"m-d" }}</td>
-                <td>{{ item.entity | truncatechars:17 }}</td>
+                <td>{{ item.entity | truncatechars:15 }}</td>
                 <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:0 | intcomma }}</td>
             </tr>
         {% endfor %}
