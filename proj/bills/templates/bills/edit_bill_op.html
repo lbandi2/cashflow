@@ -73,11 +73,48 @@
             {% else %}
                 {% if object.type == 'expense' %}
                     {% if bill_card_ops_num > 0 %}
-                        <p class="fieldWrapper">
+                        {% comment %} <p class="fieldWrapper">
                             {{ form.ops.errors }}
                             <label for="{{ form.ops.id_for_label }}">Operaciones sin equivalencia:</label>
                             {{ form.ops }}
+                        </p> {% endcomment %}
+
+
+                        <p class="fieldWrapper">
+                            <label for="{{ form.ops.id_for_label }}">Operaciones sin asociar:</label>
+                            {% for operation in bill_card_ops %}
+                            {% if bill_card_op_candidate.amount == operation.amount %}
+                                <div class="card border border-success border-2 rounded" style="background-color: #8FFECA">
+                            {% else %}
+                                <div class="card border border-2 rounded">
+                            {% endif %}
+                                <div class="container row">
+                                    <div class="col">
+                                        <p>
+                                            <br>
+                                            <font size=4em>&#128197;</font> {{ operation.date | date:"Y-m-d" }}<br>
+                                            <font size=4em>&#127970;</font> {{ operation.entity }}<br>
+                                            <font size=4em>&#128181;</font><strong> $ {{ operation.amount | floatformat:2 | intcomma }} </strong><br>
+                                            {% comment %} <font size=4em>&#128179;</font> <img src="{% static 'images/cards/' %}{{ operation.card.brand }}.png" height=18px> {{ object.bill.card.number }} {% endcomment %}
+                                        </p>
+                                    </div>
+                                    <div class="col col-3 my-auto" align="right">
+                                        <div class="container">
+                                            <a href="{% url 'bills:billop_associate_cardop' object.bill.id object.id operation.id %}" class="btn btn-secondary
+                                            {% if bill_card_op_candidate.amount == operation.amount %}
+                                                btn-success
+                                            {% endif %}
+                                            " type="submit">Asociar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            {% endfor %}
+                            <br>
                         </p>
+        
+
                     {% else %}
                         <p class="fieldWrapper">
                             <label for="{{ form.ops.id_for_label }}">Problema:</label>

@@ -35,7 +35,8 @@ class IndexView(LoginRequiredMixin, ListView):
             'pending_bills': Bill.objects.order_by('-due_date').filter(is_paid=False),
             'uncategorized_ops': OperationCard.objects.order_by('-date').filter(category_id=None),
             "unbilled_spending": self.unbilled_spending_per_card(),
-            "unbilled_spending_total": self.unbilled_spending_total()
+            "unbilled_spending_total": self.unbilled_spending(type='total'),
+            "unbilled_spending_min": self.unbilled_spending(type='min')
                     }
         return queryset
 
@@ -43,19 +44,23 @@ class IndexView(LoginRequiredMixin, ListView):
         spending = []
         for card in Card.objects.all():
             if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
-                spent = self.card_unbilled_spending(card.id)
-                spending.append([card, spent])
+                spent_min = self.card_unbilled_spending(card.id, type='min')
+                spent_total = self.card_unbilled_spending(card.id, type='total')
+                spending.append([card, spent_min, spent_total])
         return spending
 
-    def unbilled_spending_total(self):
+    def unbilled_spending(self, type):
         total = 0
         for card in Card.objects.all():
             if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
-                spent = self.card_unbilled_spending(card.id)
+                if type == 'total':
+                    spent = self.card_unbilled_spending(card.id, type='total')
+                else:
+                    spent = self.card_unbilled_spending(card.id, type='min')
                 total += spent
         return total
 
-    def card_unbilled_spending(self, card_id):
+    def card_unbilled_spending(self, card_id, type):
         amount = 0
         bills = Bill.objects.order_by('-due_date').filter(card_id=card_id) # get last bill for card
         if bills:
@@ -63,7 +68,10 @@ class IndexView(LoginRequiredMixin, ListView):
                 .filter(card_id=card_id)\
                 .filter(date__gt=bills[0].end_date) # use last bill to get end of last billable period
             for item in ops:
-                amount += item.amount / item.dues
+                if type == 'min':
+                    amount += item.amount / item.dues
+                elif type == 'total':
+                    amount += item.amount
         return amount
 
 
@@ -81,7 +89,11 @@ class UnbilledSpending(ListView):
     context_object_name = 'item_list'
 
     def get_queryset(self):
-        return self.card_unbilled_spending(self.kwargs["card"])
+        return {
+            "operations": self.card_unbilled_spending(self.kwargs["card"]),
+            "total": sum([item.amount for item in self.card_unbilled_spending(self.kwargs["card"])]),
+            "min": sum([item.amount / item.dues for item in self.card_unbilled_spending(self.kwargs["card"])])
+            }
 
     def get_context_data(self):
         context = super(UnbilledSpending, self).get_context_data()

@@ -12,7 +12,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'portal:index' %}">Home</a></li>
         <li class="breadcrumb-item active" aria-current="page">Parcial</li>
-        <li class="breadcrumb-item active" aria-current="page">{{ item_list.0.card.show_name }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ item_list.operations.0.card.show_name }}</li>
     </ol>
 </div>
 
@@ -36,7 +36,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for item in item_list %}
+        {% for item in item_list.operations %}
             <tr>
                 <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
                 <td>{{ item.date | date:"Y-m-d H:m" }}</td>
@@ -47,6 +47,24 @@
             </tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="table-info">Mínimo</td>
+                <td class="table-info" align="right">{{ item_list.min | floatformat:2 | intcomma }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="table-warning">Total</td>
+                <td class="table-warning" align="right">{{ item_list.total | floatformat:2 | intcomma }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
         </table>
     </div>
 </div>
@@ -63,7 +81,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for item in item_list %}
+        {% for item in item_list.operations %}
             <tr>
                 <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</a></td>
                 <td>{{ item.date | date:"m-d" }}</td>
@@ -72,6 +90,20 @@
             </tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="table-info" align="right">Mínimo</td>
+                <td class="table-info" align="right">{{ item_list.min | floatformat:2 | intcomma }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="table-warning" align="right">Total</td>
+                <td class="table-warning" align="right">{{ item_list.total | floatformat:2 | intcomma }}</td>
+            </tr>
+        </tfoot>
         </table>
     </div>
 </div>

@@ -36,9 +36,8 @@
 
 {% block content %}
 
-<div class="my-5 container">
-
 {% if quote_list %}
+    <div class="container-fluid d-none d-md-block" style="width: 650px"> <!-- Desktop version -->
         <div class="table-responsive">
             <table class="table table-striped table-hover">
             <thead>
@@ -64,11 +63,39 @@
             </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Compra</th>
+                <th scope="col">Venta</th>
+                <th scope="col">{% if quote_list.values.0.currency == 'cop' %}TRM{% else %}Tarjeta{% endif %}</th>
+                {% comment %} <th scope="col">Update</th> {% endcomment %}
+                </tr>
+            </thead>
+            <tbody>
+    
+            {% for quote in quote_list.values %}
+                <tr>
+                <td>{{ quote.datetime | date:"m-d" }}</td>
+                <td>{{ quote.buy | floatformat:2 }}</td>
+                <td>{{ quote.sell | floatformat:2 }}</td>
+                <td>{{ quote.other | floatformat:2 }}</th>
+                {% comment %} <td>{{ quote.time_relative }}</td> {% endcomment %}
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+
 {% else %}
     <p>No quotes are available.</p>
 {% endif %}
-
-</div>
 
 {% endblock %}
 

@@ -12,6 +12,7 @@ urlpatterns = [
     path('credit_card/<bill_id>/operation/<pk>/view/', views.BillOpUpdate.as_view(), name='bill_op_view'),
     path('credit_card/<pk>/toggle_pay/', views.bill_toggle_pay, name='bill_toggle_pay'),
     path('credit_card/<bill_id>/operation/<pk>/remove_cardop/', views.billop_remove_cardop, name='billop_remove_cardop'),
+    path('credit_card/<bill_id>/operation/<pk>/associate_cardop/<op>', views.billop_associate_cardop, name='billop_associate_cardop'),
     # path('accounts/', views.AccountsView.as_view(), name='accounts'),
     # path('account/<pk>/view/', views.AccountsViewDetail.as_view(), name='account_view'),
 ]

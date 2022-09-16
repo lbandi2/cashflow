@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 # from django.urls import reverse, reverse_lazy
 
-from cashflow.models import Bill, OperationAccount, OperationBill
+from cashflow.models import Bill, OperationAccount, OperationBill, OperationCard
 from .forms import EditBillOpForm
 
 
@@ -83,7 +83,7 @@ class BillOpUpdate(RedirectToPreviousMixin, UpdateView):
     model = OperationBill
 
     def form_valid(self, form):
-        print(f"form.cleaned_data: \n{form.cleaned_data}")
+        # print(f"form.cleaned_data: \n{form.cleaned_data}")
         self.object = form.save()
         if form.has_changed():
             if form.cleaned_data['ops']:
@@ -105,7 +105,12 @@ class BillOpUpdate(RedirectToPreviousMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(BillOpUpdate, self).get_context_data()
         context["bill_card_ops_num"] = len(self.object.bill.unmatched_card_ops())
-        print(f"context: \n{context}")
+        context["bill_card_ops"] = self.object.bill.unmatched_card_ops()
+        context["bill_card_op_candidate"] = None
+        for op in self.object.bill.unmatched_card_ops():
+            if (op.amount * (1 - 0.05)) < self.object.original_value < (op.amount * (1 + 0.05)):
+                context["bill_card_op_candidate"] = OperationCard.objects.get(pk=op.id)
+        # print(f"context: \n{context}")
         return context
 
     # def get_queryset(self):
@@ -133,6 +138,13 @@ def billop_remove_cardop(request, **kwargs):
     billop = OperationBill.objects.get(pk=kwargs['pk'])
     billop.is_matched = False
     billop.op_match = None
+    billop.save()
+    return redirect('bills:credit_card_view', bill=billop.bill.id)
+
+def billop_associate_cardop(request, **kwargs):
+    billop = OperationBill.objects.get(pk=kwargs['pk'])
+    billop.is_matched = True
+    billop.op_match = OperationCard.objects.get(pk=kwargs['op'])
     billop.save()
     return redirect('bills:credit_card_view', bill=billop.bill.id)
 

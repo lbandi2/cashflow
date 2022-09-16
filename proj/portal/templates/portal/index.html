@@ -89,14 +89,14 @@
 
 
     <div class="container" style="width: 800px">
-
-        <div class="table" style="width: 300px">
+        <div class="table" style="width: 400px">
             <table class="table table-sm table-hover">
             <thead>
                 <tr>
                     <th scope="col" class="col-md-2">&#128195;</th>
                     <th scope="col" class="col-md-1">Titular</th>
-                    <th scope="col" class="col-md-1" style="text-align:right">Pago total</th>
+                    <th scope="col" class="col-md-1 px-md-3" style="text-align:right">Mínimo</th>
+                    <th scope="col" class="col-md-1 px-md-3" style="text-align:right">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,6 +105,7 @@
                     <td><a href="{% url 'credit_cards:unbilled_spending' item.0.id %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.0.brand }}.png" height=18px> {{ item.0.number }}</a></td>
                     <td>{{ item.0.name }}</td>
                     <td class="px-md-3" style="text-align:right">{{ item.1 | floatformat:2 | intcomma }}</td>
+                    <td class="px-md-3" style="text-align:right">{{ item.2 | floatformat:2 | intcomma }}</td>
                     </tr>
             {% endfor %}
             </tbody>
@@ -112,6 +113,7 @@
                         <tr>
                             <td></td>
                             <td class="table-info" style="text-align:center">Total</td>
+                            <td class="table-info px-md-3" style="text-align:right">{{ data.unbilled_spending_min | floatformat:2 | intcomma }}</td>
                             <td class="table-info px-md-3" style="text-align:right">{{ data.unbilled_spending_total | floatformat:2 | intcomma }}</td>
                         </tr>
                     </tfoot>
@@ -195,7 +197,8 @@
                 <tr>
                     <th scope="col">&#128195;</th>
                     <th scope="col">Titular</th>
-                    <th scope="col" style="text-align:right">Pago total</th>
+                    <th scope="col" style="text-align:right">Mínimo</th>
+                    <th scope="col" style="text-align:right">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -203,6 +206,7 @@
                     <tr>
                     <td><a href="{% url 'credit_cards:unbilled_spending' item.0.id %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.0.brand }}.png" height=18px> {{ item.0.number }}</a></td>
                     <td>{{ item.0.name }}</td>
+                    <td style="text-align:right">{{ item.2 | floatformat:2 | intcomma }}</td>
                     <td style="text-align:right">{{ item.1 | floatformat:2 | intcomma }}</td>
                     </tr>
             {% endfor %}
@@ -210,7 +214,8 @@
                     <tfoot>
                         <tr>
                             <td></td>
-                            <td class="table-info" style="text-align:center">Total</td>
+                            <td class="table-info" style="text-align:center">Totales</td>
+                            <td class="table-info" style="text-align:right">{{ data.unbilled_spending_min | floatformat:2 | intcomma }}</td>
                             <td class="table-info" style="text-align:right">{{ data.unbilled_spending_total | floatformat:2 | intcomma }}</td>
                         </tr>
                     </tfoot>
