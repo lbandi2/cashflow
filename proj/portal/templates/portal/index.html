@@ -206,8 +206,8 @@
                     <tr>
                     <td><a href="{% url 'credit_cards:unbilled_spending' item.0.id %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.0.brand }}.png" height=18px> {{ item.0.number }}</a></td>
                     <td>{{ item.0.name }}</td>
-                    <td style="text-align:right">{{ item.2 | floatformat:2 | intcomma }}</td>
-                    <td style="text-align:right">{{ item.1 | floatformat:2 | intcomma }}</td>
+                    <td style="text-align:right">{{ item.2 | floatformat:0 | intcomma }}</td>
+                    <td style="text-align:right">{{ item.1 | floatformat:0 | intcomma }}</td>
                     </tr>
             {% endfor %}
             </tbody>
@@ -215,8 +215,8 @@
                         <tr>
                             <td></td>
                             <td class="table-info" style="text-align:center">Totales</td>
-                            <td class="table-info" style="text-align:right">{{ data.unbilled_spending_min | floatformat:2 | intcomma }}</td>
-                            <td class="table-info" style="text-align:right">{{ data.unbilled_spending_total | floatformat:2 | intcomma }}</td>
+                            <td class="table-info" style="text-align:right">{{ data.unbilled_spending_min | floatformat:0 | intcomma }}</td>
+                            <td class="table-info" style="text-align:right">{{ data.unbilled_spending_total | floatformat:0 | intcomma }}</td>
                         </tr>
                     </tfoot>
             </table>
@@ -307,8 +307,8 @@
                 <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %} {{ item.account.name }}</a></td>
                 {% endif %}
                 <td>{{ item.date | date:"m-d" }}</td>
-                <td>{{ item.entity | truncatechars:12 }}</td>
-                <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                <td>{{ item.entity | truncatechars:17 }}</td>
+                <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:0 | intcomma }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -425,9 +425,9 @@
                 <tr>
                 <td><img src="{% static '/images/dolar/' %}{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}.png" width="20" height="20"></td>
                 <td><a class="link-dark text-decoration-none rowlink" href="/dolar/history/{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}"><strong>{% if 'gene' in quote.0.name %}COP{% else %}{{ quote.0.name | slice:4 | upper }}{% endif %}</strong></a></td>
-                <td style="text-align:right">{{ quote.0.buy | floatformat:2 }}{% if quote.0.buy > quote.1.buy or quote.1.buy == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
-                <td style="text-align:right">{{ quote.0.sell | floatformat:2 }}{% if quote.0.sell > quote.1.sell or quote.1.sell == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
-                <td style="text-align:right">{% if 'gene' in quote.0.name %}{% if quote.0.other > 0 %}{{ quote.0.other | floatformat:2 }}{% if quote.0.other > quote.1.other or quote.1.other == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}{% endif %}{% endif %}</td>
+                <td style="text-align:right">{{ quote.0.buy | floatformat:0 }}{% if quote.0.buy > quote.1.buy or quote.1.buy == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
+                <td style="text-align:right">{{ quote.0.sell | floatformat:0 }}{% if quote.0.sell > quote.1.sell or quote.1.sell == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
+                <td style="text-align:right">{% if 'gene' in quote.0.name %}{% if quote.0.other > 0 %}{{ quote.0.other | floatformat:0 }}{% if quote.0.other > quote.1.other or quote.1.other == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}{% endif %}{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
