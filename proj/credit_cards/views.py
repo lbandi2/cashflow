@@ -33,9 +33,39 @@ class IndexView(LoginRequiredMixin, ListView):
         queryset = {
             'last_ops': OperationCard.objects.order_by('-date')[:5],
             'pending_bills': Bill.objects.order_by('-due_date').filter(is_paid=False),
-            'uncategorized_ops': OperationCard.objects.order_by('-date').filter(category_id=None)
+            'uncategorized_ops': OperationCard.objects.order_by('-date').filter(category_id=None),
+            "unbilled_spending": self.unbilled_spending_per_card(),
+            "unbilled_spending_total": self.unbilled_spending_total()
                     }
         return queryset
+
+    def unbilled_spending_per_card(self):
+        spending = []
+        for card in Card.objects.all():
+            if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
+                spent = self.card_unbilled_spending(card.id)
+                spending.append([card, spent])
+        return spending
+
+    def unbilled_spending_total(self):
+        total = 0
+        for card in Card.objects.all():
+            if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
+                spent = self.card_unbilled_spending(card.id)
+                total += spent
+        return total
+
+    def card_unbilled_spending(self, card_id):
+        amount = 0
+        bills = Bill.objects.order_by('-due_date').filter(card_id=card_id) # get last bill for card
+        if bills:
+            ops = OperationCard.objects.order_by('-date')\
+                .filter(card_id=card_id)\
+                .filter(date__gt=bills[0].end_date) # use last bill to get end of last billable period
+            for item in ops:
+                amount += item.amount / item.dues
+        return amount
+
 
 
 class OpUpdate(RedirectToPreviousMixin, UpdateView):

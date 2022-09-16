@@ -20,18 +20,25 @@
 
 {% block content %}
 
-<div class="my-5 container" align="center">
+{% comment %} <div class="my-5 container" align="center">
 
     <a href="{% url 'credit_cards:last_ops' 1 %}" class="btn btn-dark me-1">Ultimos movimientos</a>
 
     <a href="{% url 'bills:credit_cards' %}" class="btn btn-dark me-1">Resúmenes</a>
 
-</div>
+</div> {% endcomment %}
 
 {% if item_list.pending_bills %}
     <div class="container-fluid d-none d-md-block">
-        <div class="my-3 container" style="width: 900px">
+        {% comment %} <div class="my-3 container" style="width: 900px">
             <h4>&#9200; Resúmenes pendientes</h4>
+        </div> {% endcomment %}
+
+        <div class="my-3 container" style="width: 900px" align="center">
+            <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'bills:credit_cards' %}">Resúmenes</a></li>
+            </ol>
         </div>
 
         <div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
@@ -67,8 +74,15 @@
     </div>
 
     <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
-        <div class="my-3 container">
+        {% comment %} <div class="my-3 container">
             <h4>&#9200; Resúmenes pendientes</h4>
+        </div> {% endcomment %}
+
+        <div class="my-3 container" align="center">
+            <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'bills:credit_cards' %}">Resúmenes</a></li>
+            </ol>
         </div>
 
         <div class="table-responsive">
@@ -98,11 +112,110 @@
 
 {% endif %}
 
+{% if item_list.unbilled_spending %}
+
+<div class="container d-none d-md-block"> <!-- Desktop version -->
+    {% comment %} <div class="my-3 container">
+        <h4> Parciales </h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Parciales</li>
+        </ol>
+    </div>
+
+
+    <div class="container" style="width: 800px">
+
+        <div class="table" style="width: 300px">
+            <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="col-md-2">&#128195;</th>
+                    <th scope="col" class="col-md-1">Titular</th>
+                    <th scope="col" class="col-md-1" style="text-align:right">Pago total</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in item_list.unbilled_spending %}
+                    <tr>
+                    <td><a href="{% url 'credit_cards:unbilled_spending' item.0.id %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.0.brand }}.png" height=18px> {{ item.0.number }}</a></td>
+                    <td>{{ item.0.name }}</td>
+                    <td class="px-md-3" style="text-align:right">{{ item.1 | floatformat:2 | intcomma }}</td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td class="table-info" style="text-align:center">Total</td>
+                            <td class="table-info px-md-3" style="text-align:right">{{ item_list.unbilled_spending_total | floatformat:2 | intcomma }}</td>
+                        </tr>
+                    </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
+    {% comment %} <div class="my-3 container">
+        <h4> Parciales </h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Parciales</li>
+        </ol>
+    </div>
+
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">&#128195;</th>
+                <th scope="col">Titular</th>
+                <th scope="col" style="text-align:right">Pago total</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in item_list.unbilled_spending %}
+                <tr>
+                <td><a href="{% url 'credit_cards:unbilled_spending' item.0.id %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.0.brand }}.png" height=18px> {{ item.0.number }}</a></td>
+                <td>{{ item.0.name }}</td>
+                <td style="text-align:right">{{ item.1 | floatformat:2 | intcomma }}</td>
+                </tr>
+        {% endfor %}
+        </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td class="table-info" style="text-align:center">Total</td>
+                        <td class="table-info" style="text-align:right">{{ item_list.unbilled_spending_total | floatformat:2 | intcomma }}</td>
+                    </tr>
+                </tfoot>
+        </table>
+    </div>
+</div>
+
+
+{% endif %}
+
 <br>
 
 <div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
-    <div class="my-3 container" style="width: 900px">
+    {% comment %} <div class="my-3 container" style="width: 900px">
         <h4>&#x1F4B3; Movimientos</h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:last_ops' 1 %}">Ver todas</a></li>
+        </ol>
     </div>
 
     <div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
@@ -132,8 +245,15 @@
 </div>
 
 <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
-    <div class="my-3 container">
+    {% comment %} <div class="my-3 container">
         <h4>&#x1F4B3; Movimientos</h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:last_ops' 1 %}">Ver todas</a></li>
+        </ol>
     </div>
 
     <table class="table table-sm table-hover">

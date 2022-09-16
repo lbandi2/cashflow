@@ -20,18 +20,24 @@
 
 {% block content %}
 
-<div class="my-5 container" align="center">
+{% comment %} <div class="my-5 container" align="center">
 
     <a href="{% url 'accounts:last_ops' %}" class="btn btn-dark me-1">Ultimos movimientos</a>
 
-    {% comment %} <a href="{% url 'bills:accounts' %}" class="btn btn-dark me-1">Resúmenes</a> {% endcomment %}
-
-</div>
+</div> {% endcomment %}
 
 <div class="container-fluid d-none d-md-block">
-    <div class="my-3 container" style="width: 900px">
-        <h4>&#128181; Movimientos</h4>
+    {% comment %} <div class="my-3 container" style="width: 900px">
+        <h4>&#128181; Movimientos <button type="button" class="btn btn-sm btn-secondary me-1" onclick=location.href="{% url 'accounts:last_ops' %}"><i class="material-icons">chevron_right</i></button></h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" style="width: 900px" align="center">
+    <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'accounts:last_ops' %}">Ver todas</a></li>
+    </ol>
     </div>
+
 
     <div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
         <table class="table table-sm table-hover">
@@ -60,9 +66,17 @@
 </div>
 
 <div class="container-fluid d-block d-md-none"> <!-- Mobile version -->
-    <div class="my-3 container">
+    {% comment %} <div class="my-3 container">
         <h4>&#128181; Movimientos</h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'accounts:last_ops' %}">Ver todas</a></li>
+        </ol>
     </div>
+    
 
     <table class="table table-sm table-hover">
     <thead>
@@ -91,8 +105,15 @@
 {% if item_list.uncategorized_ops %}
 
 <div class="container-fluid d-none d-md-block">
-    <div class="my-3 container" style="width: 900px">
+    {% comment %} <div class="my-3 container" style="width: 900px">
         <h4>&#x1F4DD; Movimientos sin categorizar</h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item active" aria-current="page">Sin categorizar</li>
+        </ol>
     </div>
 
     <div class="container-fluid d-none d-md-block" style="width: 800px"> <!-- Desktop version -->
@@ -122,9 +143,17 @@
 </div>
 
 <div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
-    <div class="my-3 container">
+    {% comment %} <div class="my-3 container">
         <h4>&#x1F4DD; Movimientos sin categorizar</h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item active" aria-current="page">Sin categorizar</li>
+        </ol>
     </div>
+
 
     <div class="table-responsive">
         <table class="table table-sm table-hover">

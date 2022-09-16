@@ -15,12 +15,18 @@
 {% if data.pending_bills %}
 
     <div class="container d-none d-md-block" style="width: 900px"> <!-- Desktop version -->
-        <div class="my-3 container">
+        {% comment %} <div class="my-3 container">
             <h4> Resúmenes </h4>
+        </div> {% endcomment %}
+
+        <div class="my-3 container" style="width: 900px" align="center">
+            <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'bills:credit_cards' %}">Resúmenes</a></li>
+            </ol>
         </div>
 
         <div class="container" style="width: 800px">
-
             <div class="table" style="width: 650px">
                 <table class="table table-sm table-hover">
                 <thead>
@@ -70,9 +76,17 @@
 {% if data.unbilled_spending %}
 
 <div class="container d-none d-md-block" style="width: 900px"> <!-- Desktop version -->
-    <div class="my-3 container">
+    {% comment %} <div class="my-3 container">
         <h4> Parciales </h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Parciales</li>
+        </ol>
     </div>
+
 
     <div class="container" style="width: 800px">
 
@@ -113,9 +127,17 @@
 
 <div class="container d-block d-md-none">  <!-- Mobile version -->
     {% if data.pending_bills %}
-    <div class="my-3 container">
+    {% comment %} <div class="my-3 container">
         <h4> Resúmenes </h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'bills:credit_cards' %}">Resúmenes</a></li>
+        </ol>
     </div>
+
 
     <div class="table">
         <table class="table table-sm table-hover">
@@ -155,10 +177,18 @@
 {% if data.unbilled_spending %}
 
     <div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
-        <div class="my-3 container">
+        {% comment %} <div class="my-3 container">
             <h4> Parciales </h4>
+        </div> {% endcomment %}
+
+        <div class="my-3 container" align="center">
+            <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:index' %}">Tarjetas</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Parciales</li>
+            </ol>
         </div>
     
+
         <div class="table-responsive">
             <table class="table table-sm table-hover">
             <thead>
@@ -194,12 +224,20 @@
 <!-- Operations -->
 
 <div class="container d-none d-md-block" style="width: 900px"> <!-- Desktop version -->
-    <div class="my-3 container pt-3">
+    {% comment %} <div class="my-3 container pt-3">
         <h4> Movimientos</h4>
-    </div>
-    
-    <div class="container" style="width: 800px">
+    </div> {% endcomment %}
 
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:last_ops' 1 %}">Tarjeta</a></li>
+            <li class="breadcrumb-item"  style="--bs-breadcrumb-divider: '/';"><a class="text-decoration-none" href="{% url 'accounts:last_ops' %}">Cuenta</a></li>
+        </ol>
+    </div>
+
+
+    <div class="container" style="width: 800px">
         <div class="table">
             <table class="table table-sm table-hover">
             <thead>
@@ -232,9 +270,18 @@
 </div>
 
 <div class="container d-block d-md-none"> <!-- Mobile version -->
-    <div class="my-3 container pt-3">
+    {% comment %} <div class="my-3 container pt-3">
         <h4> Movimientos</h4>
+    </div> {% endcomment %}
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:last_ops' 1 %}">Tarjeta</a></li>
+            <li class="breadcrumb-item"  style="--bs-breadcrumb-divider: '/';"><a class="text-decoration-none" href="{% url 'accounts:last_ops' %}">Cuenta</a></li>
+        </ol>
     </div>
+
 
     <div class="table">
         <table class="table table-sm table-hover">
@@ -302,10 +349,17 @@
 {% if data.dolar %}
 
     <div class="container d-none d-md-block" style="width: 900px"> <!-- Desktop version -->
-        <div class="my-3 container pt-3">
+        {% comment %} <div class="my-3 container pt-3">
             <h4> Cotizaciones</h4>
+        </div> {% endcomment %}
+
+        <div class="my-3 container" style="width: 900px" align="center">
+            <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <li class="breadcrumb-item active" aria-current="page">Dolar</li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'dolar:index' %}">Cotizaciones</a></li>
+            </ol>
         </div>
-        
+
         <div class="container" style="width: 800px">
             <div class="table" style="width: 550px">
                 <table class="table table-sm table-hover">
@@ -338,9 +392,17 @@
 
 
     <div class="container d-block d-md-none"> <!-- Mobile version -->
-        <div class="my-3 container pt-3">
+        {% comment %} <div class="my-3 container pt-3">
             <h4> Cotizaciones</h4>
+        </div> {% endcomment %}
+
+        <div class="my-3 container" align="center">
+            <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                <li class="breadcrumb-item active" aria-current="page">Dolar</li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'dolar:index' %}">Cotizaciones</a></li>
+            </ol>
         </div>
+
 
         <div class="table">
             <table class="table table-sm table-hover">
