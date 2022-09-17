@@ -76,18 +76,18 @@ class KwAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
     form_class = AddKwForm
 
     def form_valid(self, form):
-        # print(form.cleaned_data)
-        # print(self.kwargs)
         self.object = form.save(commit=False)
         self.object.name = self.object.name.lower()
         self.object.category = OperationCategories.objects.get(pk=self.kwargs['pk'])
-        # print(self.object)
         self.object = form.save()
         return redirect('categories:edit', pk=self.object.category.id)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
         context['category'] = OperationCategories.objects.get(id=self.kwargs["pk"])
-    #     # category_id = int(self.kwargs['pk'])
-    #     # context['form'] = AddKwForm(initial={'category': (category_id, category_id)})
         return context
+
+def remove_keyword(request, **kwargs):
+    keyword = Keyword.objects.get(pk=kwargs['kw'])
+    keyword.delete()
+    return redirect('categories:edit', pk=kwargs['pk'])

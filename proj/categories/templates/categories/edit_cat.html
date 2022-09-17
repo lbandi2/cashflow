@@ -42,16 +42,18 @@
 
         <div class="container-responsive">
             <div class="row">
-                <div class="col-9 mx-auto">
+                <div class="col-8 mx-auto">
+                    <div class="container">
                     {% if obj.keywords %}
                         {% for item in obj.keywords %}
-                            &#128313; {{ item.name }}<br>
+                            <a class="link-dark text-decoration-none" href="{% url 'categories:delete_keyword' obj.pk item.pk %}">&#10060; {{ item.name }}</a><br>
                         {% endfor %}
                     {% else %}
                     <div class="my-3 container">
                         Ninguna
                     </div>
                     {% endif %}
+                    </div>
                 </div>
                 <div class="col">
                     <br>
@@ -107,7 +109,7 @@
                     <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name | slice:3 }}</a></td>
                 {% endif %}
                     <td>{{ item.date | date:"m-d" }}</td>
-                    <td>{{ item.entity | truncatechars:15 }}</td>
+                    <td>{{ item.entity }}</td>
                     <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
                     <td class="priority-3" style="text-align:center">{{ item.dues }}</td>
                 </tr>
