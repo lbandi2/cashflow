@@ -29,7 +29,7 @@
 </div> {% endcomment %}
 
 {% if item_list.pending_bills %}
-    <div class="container-fluid d-none d-md-block">
+    <div class="container-fluid d-none d-md-block"> <!-- Desktop version -->
         {% comment %} <div class="my-3 container" style="width: 900px">
             <h4>&#9200; Resúmenes pendientes</h4>
         </div> {% endcomment %}
@@ -101,7 +101,7 @@
                     <td><a href="{% url 'bills:credit_card_view' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</td>
                     {% comment %} <td><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</td> {% endcomment %}
                     <td style="text-align:center">{{ item.due_date | date:"m-d" }}</td>
-                    <td style="text-align:center">{{ item.min_pay | floatformat:2 | intcomma }}</td>
+                    <td style="text-align:center">{{ item.min_pay | floatformat:0 | intcomma }}</td>
                     <td style="text-align:center">{% if item.inconsistencies != 0 %}&#x274C;{% else %}&#x2714;{% endif %}</td>
                 </tr>
             {% endfor %}
@@ -180,7 +180,8 @@
             <tr>
                 <th scope="col">&#128195;</th>
                 <th scope="col">Titular</th>
-                <th scope="col" style="text-align:right">Pago total</th>
+                <th scope="col" style="text-align:right">Mínimo</th>
+                <th scope="col" style="text-align:right">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -188,7 +189,8 @@
                 <tr>
                 <td><a href="{% url 'credit_cards:unbilled_spending' item.0.id %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.0.brand }}.png" height=18px> {{ item.0.number }}</a></td>
                 <td>{{ item.0.name }}</td>
-                <td style="text-align:right">{{ item.1 | floatformat:2 | intcomma }}</td>
+                <td style="text-align:right">{{ item.1 | floatformat:0 | intcomma }}</td>
+                <td style="text-align:right">{{ item.2 | floatformat:0 | intcomma }}</td>
                 </tr>
         {% endfor %}
         </tbody>
@@ -196,7 +198,8 @@
                     <tr>
                         <td></td>
                         <td class="table-info" style="text-align:center">Total</td>
-                        <td class="table-info" style="text-align:right">{{ item_list.unbilled_spending_total | floatformat:2 | intcomma }}</td>
+                        <td class="table-info" style="text-align:right">{{ item_list.unbilled_spending_min | floatformat:0 | intcomma }}</td>
+                        <td class="table-info" style="text-align:right">{{ item_list.unbilled_spending_total | floatformat:0 | intcomma }}</td>
                     </tr>
                 </tfoot>
         </table>
@@ -272,8 +275,8 @@
         <tr>
             <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none rowlink"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</a></td>
             <td>{{ item.date | date:"m-d" }}</td>
-            <td>{{ item.entity | truncatechars:14 }}</td>
-            <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+            <td>{{ item.entity | truncatechars:15 }}</td>
+            <td align="right">{{ item.amount | floatformat:0 | intcomma }}</td>
         </tr>
     {% endfor %}
     </tbody>
@@ -332,7 +335,7 @@
                 {% comment %} <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td> {% endcomment %}
                 <td>{{ item.date | date:"y-m-d" }}</td>
                 <td>{{ item.entity | truncatechars:10 }}</td>
-                <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                <td class="currency" align="right">{{ item.amount | floatformat:0 | intcomma }}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -83,8 +83,8 @@
         <tr>
             <th scope="col"></th>
             <th scope="col">Fecha</th>
-            <th scope="col">Importe</th>
             <th scope="col">Entidad</th>
+            <th scope="col">Importe</th>
         </tr>
     </thead>
     <tbody>
@@ -92,8 +92,8 @@
         <tr>
             <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink text-decoration-none link-dark">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %} {{ item.account.name }}</a></td>
             <td>{{ item.date | date:"m-d" }}</td>
-            <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             <td>{{ item.entity | truncatechars:12 }}</td>
+            <td align="right">{{ item.amount | floatformat:0 | intcomma }}</td>
         </tr>
     {% endfor %}
     </tbody>

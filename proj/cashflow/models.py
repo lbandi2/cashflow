@@ -1,13 +1,10 @@
 from django.db import models
 from django.urls import reverse
 
-# from trips.models import Trip
-# import locale
 from datetime import datetime, timedelta
 from itertools import chain
 
 from django.core.validators import MaxValueValidator, MinValueValidator 
-from django.db.models import Q
 
 class Account(models.Model):
     bank = models.CharField(max_length=30)
@@ -175,6 +172,16 @@ class OperationCategories(models.Model):
     def num_operations(self):
         return len(self.operations())
 
+    def keywords(self):
+        return Keyword.objects.filter(category=self.id)
+
+
+class Keyword(models.Model):
+    name = models.CharField(max_length=30)
+    category = models.ForeignKey(OperationCategories, on_delete = models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('categories:index')
 
 class OperationCard(models.Model):
     card = models.ForeignKey(Card, on_delete=models.CASCADE)

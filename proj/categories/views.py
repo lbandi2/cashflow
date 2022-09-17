@@ -6,8 +6,8 @@ from django.http import request, HttpResponseRedirect
 
 from datetime import datetime, timedelta
 
-from cashflow.models import OperationCategories
-from .forms import EditCatForm
+from cashflow.models import OperationCategories, Keyword
+from .forms import EditCatForm, AddKwForm
 
 class RedirectToPreviousMixin:
     default_redirect = '/'
@@ -44,7 +44,7 @@ class CatIndexView(LoginRequiredMixin, ListView):
     context_object_name = 'item_list'
 
     def get_queryset(self):
-        return OperationCategories.objects.all()
+        return OperationCategories.objects.all().order_by('name')
 
 
 class CatAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
@@ -56,4 +56,38 @@ class CatAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
     def get_context_data(self):
         context = super(CatAddView, self).get_context_data()
         context["title"] = "Agregar categoría"
+        return context
+
+
+class KwIndexView(LoginRequiredMixin, ListView):
+    template_name = 'keywords/index.html'
+    login_url = 'home:login'
+    context_object_name = 'item_list'
+
+    def get_queryset(self):
+        queryset = Keyword.objects.all()
+        return queryset
+
+
+class KwAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
+    template_name = 'categories/add_kw.html'
+    login_url = 'home:login'
+    model = Keyword
+    form_class = AddKwForm
+
+    def form_valid(self, form):
+        # print(form.cleaned_data)
+        # print(self.kwargs)
+        self.object = form.save(commit=False)
+        self.object.name = self.object.name.lower()
+        self.object.category = OperationCategories.objects.get(pk=self.kwargs['pk'])
+        # print(self.object)
+        self.object = form.save()
+        return redirect('categories:edit', pk=self.object.category.id)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data()
+        context['category'] = OperationCategories.objects.get(id=self.kwargs["pk"])
+    #     # category_id = int(self.kwargs['pk'])
+    #     # context['form'] = AddKwForm(initial={'category': (category_id, category_id)})
         return context

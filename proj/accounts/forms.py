@@ -12,7 +12,6 @@ class EditOpForm(ModelForm):
     type = forms.CharField(label='Tipo', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     amount = forms.FloatField(label='Monto', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     entity = forms.CharField(label='Entidad', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # category = forms.CharField(label='Categoría', max_length=20, widget=forms.Select(choices=CATEGORIES, attrs={'class': 'form-select'}))
     category = forms.ModelChoiceField(label='Categoría', required=False, queryset=OperationCategories.objects.all().order_by('name'), widget=forms.Select(attrs={'class': 'form-select'}))
     trip = forms.ModelChoiceField(label='Viaje', required=False, queryset=Trip.objects.all().order_by('-start_date'), widget=forms.Select(attrs={'class': 'form-select'}))
 

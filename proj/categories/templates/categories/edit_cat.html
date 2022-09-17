@@ -26,6 +26,53 @@
             {{ form.as_p }}
         <br>
 
+        <div class="my-3 container">
+            <h5> Palabras clave asociadas </h5>
+        </div>
+
+        {% comment %} {% if obj.keywords %}
+        {% for item in obj.keywords %}
+            {{ item }}
+        {% endfor %}
+        {% else %}
+        <div class="my-3 container">
+            Ninguna
+        </div> {% endcomment %}
+
+
+        <div class="container-responsive">
+            <div class="row">
+                <div class="col-9 mx-auto">
+                    {% if obj.keywords %}
+                        {% for item in obj.keywords %}
+                            &#128313; {{ item.name }}<br>
+                        {% endfor %}
+                    {% else %}
+                    <div class="my-3 container">
+                        Ninguna
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <br>
+                    <p>
+                        <input
+                        class="btn btn-sm btn-warning me-1"
+                        value="Agregar"
+                        type="button"
+                        onclick="location.href='{% url "categories:add_keyword" obj.id %}'">
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+
+        {% comment %} {% endif %} {% endcomment %}
+
+        <br>
+
+
         {% if obj.operations %}
 
         <div class="my-3 container">
@@ -57,10 +104,10 @@
                 {% if item.card %}
                     <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
                 {% elif item.account %}
-                    <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name }}</a></td>
+                    <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name | slice:3 }}</a></td>
                 {% endif %}
                     <td>{{ item.date | date:"m-d" }}</td>
-                    <td>{{ item.entity }}</td>
+                    <td>{{ item.entity | truncatechars:15 }}</td>
                     <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
                     <td class="priority-3" style="text-align:center">{{ item.dues }}</td>
                 </tr>

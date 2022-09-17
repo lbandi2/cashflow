@@ -32,6 +32,7 @@
                 <th scope="col"></th>
                 <th scope="col">Nombre</th>
                 <th scope="col" style="text-align:center">Operaciones</th>
+                <th scope="col" style="text-align:center">Palabras</th>
             </tr>
         </thead>
         <tbody>
@@ -40,6 +41,7 @@
                 <td><a href="{% url 'categories:edit' item.pk %}" class="rowlink"><img src={% static '/images/edit-button.png' %} height=15px></td>
                 <td>{{ item.name }}</td>
                 <td style="text-align:center">{{ item.num_operations }}</td>
+                <td style="text-align:center">{{ item.keywords.count }}</td>
             </tr>
         {% endfor %}
         </tbody>

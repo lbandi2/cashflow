@@ -9,4 +9,7 @@ urlpatterns = [
     path('add/', views.CatAddView.as_view(), name='add'),
     path('<pk>/edit/', views.CatEditView.as_view(), name='edit'),
     path('<pk>/delete/', views.CatDeleteView.as_view(), name='delete'),
+    path('<pk>/keyword_add/', views.KwAddView.as_view(), name='add_keyword'),
+    # path('keyword/<pk>/edit/', views.KeywordEditView.as_view(), name='edit_keyword'),
+    # path('keyword/<pk>/delete/', views.KeywordDeleteView.as_view(), name='delete_keyword'),
 ]
