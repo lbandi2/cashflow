@@ -42,11 +42,37 @@
 
         <div class="container-responsive">
             <div class="row">
-                <div class="col-8 mx-auto">
+                <div class="col-9 mx-auto">
                     <div class="container">
                     {% if obj.keywords %}
                         {% for item in obj.keywords %}
-                            <a class="link-dark text-decoration-none" href="{% url 'categories:delete_keyword' obj.pk item.pk %}">&#10060; {{ item.name }}</a><br>
+                            {% comment %} <a class="link-dark text-decoration-none" href="{% url 'categories:delete_keyword' obj.pk item.pk %}">&#10060; {{ item.name }}</a><br> {% endcomment %}
+
+                            <div class="container mt-1">
+                                <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#item{{item.id}}">
+                                    &#10060; {{ item.name }}
+                                </button>
+                                <br>
+                            </div>
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="item{{item.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="item{{item.id}}">Palabra clave</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Borrar '{{ item.name }}'?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" onclick=location.href="{% url 'categories:delete_keyword' obj.pk item.pk %}">Borrar</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     {% else %}
                     <div class="my-3 container">
