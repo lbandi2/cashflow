@@ -104,13 +104,26 @@ class BillOpUpdate(RedirectToPreviousMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(BillOpUpdate, self).get_context_data()
-        context["bill_card_ops_num"] = len(self.object.bill.unmatched_card_ops())
-        context["bill_card_ops"] = self.object.bill.unmatched_card_ops()
+        tolerance = 0.2                                                # tolerance percent +-
+        unmatched = self.object.bill.unmatched_card_ops()\
+            .filter(amount__lte=self.object.original_value * (1 + tolerance))\
+            .filter(amount__gte=self.object.original_value * (1 - tolerance))
+        context["bill_card_ops_num"] = len(unmatched)
+        context["bill_card_ops"] = unmatched
         context["bill_card_op_candidate"] = None
-        for op in self.object.bill.unmatched_card_ops():
-            if (op.amount * (1 - 0.05)) < self.object.original_value < (op.amount * (1 + 0.05)):
+
+        for op in unmatched:
+            if (op.amount * (1 - 0.2)) < self.object.original_value < (op.amount * (1 + 0.2)):
                 context["bill_card_op_candidate"] = OperationCard.objects.get(pk=op.id)
-        # print(f"context: \n{context}")
+        else:
+            for op in OperationBill.objects.all():
+                if op.authorization == self.object.authorization:
+                    if op.original_value == self.object.original_value:
+                        if op.op_match_id:
+                            context["bill_card_op_candidate"] = OperationCard.objects.get(pk=op.op_match_id)
+                            context["bill_card_ops"] = OperationCard.objects.filter(pk=op.op_match_id)
+                            context["bill_card_ops_num"] = len(OperationCard.objects.filter(pk=op.op_match_id))
+        print(context)
         return context
 
     # def get_queryset(self):

@@ -1,0 +1,78 @@
+{% load static %}
+
+{% load humanize %}
+
+<div class="container d-none d-md-block" style="width: 900px"> <!-- Desktop version -->
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Dolar</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'dolar:index' %}">Cotizaciones</a></li>
+        </ol>
+    </div>
+
+    <div class="container" style="width: 800px">
+        <div class="table" style="width: 550px">
+            <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                <th scope="col">&#128202;</th>
+                <th scope="col"></th>
+                <th scope="col" style="text-align:center">Compra</th>
+                <th scope="col" style="text-align:center">Venta</th>
+                <th scope="col" style="text-align:center">TRM</th>
+                <th scope="col">Update</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for quote in dolar %}
+                <tr>
+                <td><img src="{% static '/images/dolar/' %}{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}.png" width="20" height="20"></td>
+                <td><a class="link-dark text-decoration-none rowlink" href="/dolar/history/{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}"><strong>{% if 'gene' in quote.0.name %}COP{% else %}{{ quote.0.name | slice:4 | upper }}{% endif %}</strong></a></td>
+                <td style="text-align:right">{{ quote.0.buy | floatformat:2 }}{% if quote.0.buy > quote.1.buy or quote.1.buy == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
+                <td style="text-align:right">{{ quote.0.sell | floatformat:2 }}{% if quote.0.sell > quote.1.sell or quote.1.sell == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
+                <td style="text-align:right">{% if 'gene' in quote.0.name %}{% if quote.0.other > 0 %}{{ quote.0.other | floatformat:2 }}{% if quote.0.other > quote.1.other or quote.1.other == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}{% endif %}{% endif %}</td>
+                <td>{{ quote.0.time_relative }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="container d-block d-md-none"> <!-- Mobile version -->
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Dolar</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'dolar:index' %}">Cotizaciones</a></li>
+        </ol>
+    </div>
+
+
+    <div class="table">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+            <th scope="col">&#128202;</th>
+            <th scope="col"></th>
+            <th scope="col" style="text-align:center">Compra</th>
+            <th scope="col" style="text-align:center">Venta</th>
+            <th scope="col" style="text-align:center">TRM</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quote in dolar %}
+            <tr>
+            <td><img src="{% static '/images/dolar/' %}{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}.png" width="20" height="20"></td>
+            <td><a class="link-dark text-decoration-none rowlink" href="/dolar/history/{% if 'gene' in quote.0.name %}cop{% else %}{{ quote.0.name }}{% endif %}"><strong>{% if 'gene' in quote.0.name %}COP{% else %}{{ quote.0.name | slice:4 | upper }}{% endif %}</strong></a></td>
+            <td style="text-align:right">{{ quote.0.buy | floatformat:0 }}{% if quote.0.buy > quote.1.buy or quote.1.buy == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
+            <td style="text-align:right">{{ quote.0.sell | floatformat:0 }}{% if quote.0.sell > quote.1.sell or quote.1.sell == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}</td>
+            <td style="text-align:right">{% if 'gene' in quote.0.name %}{% if quote.0.other > 0 %}{{ quote.0.other | floatformat:0 }}{% if quote.0.other > quote.1.other or quote.1.other == None %}<font color="red"> &#9650;</font>{% else %}<font color="green"> &#9660;</font>{% endif %}{% endif %}{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>

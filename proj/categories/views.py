@@ -29,13 +29,19 @@ class CatEditView(LoginRequiredMixin, RedirectToPreviousMixin, UpdateView):
         context = super(CatEditView, self).get_context_data()
         context["obj"] = self.object
         context["title"] = "Edit item"
+        context["form2"] = AddKwForm
         return context
 
 
-class CatDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = 'trips/delete.html'
-    model = OperationCategories
-    success_url = reverse_lazy('categories:index')
+# class CatDeleteView(LoginRequiredMixin, DeleteView):
+#     template_name = 'categories/delete.html'
+#     model = OperationCategories
+#     success_url = reverse_lazy('categories:index')
+
+def remove_category(request, **kwargs):
+    category = OperationCategories.objects.get(pk=kwargs['pk'])
+    category.delete()
+    return redirect('categories:index')
 
 
 class CatIndexView(LoginRequiredMixin, ListView):
@@ -86,6 +92,35 @@ class KwAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
         context = super().get_context_data()
         context['category'] = OperationCategories.objects.get(id=self.kwargs["pk"])
         return context
+
+# def add_keyword(request, **kwargs):
+#     print(kwargs)
+#     # print(request.method)
+#     # print(request)
+#     category = OperationCategories.objects.get(pk=kwargs['pk'])
+#     keyword = Keyword(name=kwargs['kw_name'], category=category)
+#     keyword.save()
+#     return redirect('categories:edit', pk=kwargs['pk'])
+
+# class KwAddView(LoginRequiredMixin, RedirectToPreviousMixin, CreateView):
+#     template_name = 'categories/add_kw.html'
+#     form_class = AddKwForm
+#     model = Keyword
+
+#     def get_context_data(self):
+#         context = super(KwAddView, self).get_context_data()
+#         context["obj"] = self.object
+#         return context
+
+#     def form_valid(self, form):
+#         # self.object = form.save()
+#         print("form", form.cleaned_data)
+#         self.object = form.save(commit=False)
+#         self.object.name = self.object.name.lower()
+#         self.object.category = OperationCategories.objects.get(pk=self.kwargs['pk'])
+#         self.object = form.save()
+#         return redirect('categories:edit', pk=self.object.category.id)
+
 
 def remove_keyword(request, **kwargs):
     keyword = Keyword.objects.get(pk=kwargs['kw'])

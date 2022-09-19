@@ -1,0 +1,69 @@
+{% load static %}
+
+{% load humanize %}
+
+<div class="container-fluid d-none d-md-block">  <!-- Desktop version -->
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item active" aria-current="page">Sin categorizar</li>
+        </ol>
+    </div>
+
+    <div class="container-fluid d-none d-md-block" style="width: 800px">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Entidad</th>
+                    <th scope="col">Importe</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in uncategorized_ops %}
+                <tr>
+                    <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                    <td>{{ item.date | date:"Y-m-d H:m" }}</td>
+                    <td>{{ item.entity }}</td>
+                    <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid d-block d-md-none">  <!-- Mobile version -->
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item active" aria-current="page">Sin categorizar</li>
+        </ol>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Entidad</th>
+                <th scope="col">Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in uncategorized_ops %}
+            <tr>
+                <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</td>
+                <td>{{ item.date | date:"y-m-d" }}</td>
+                <td>{{ item.entity | truncatechars:10 }}</td>
+                <td class="currency" align="right">{{ item.amount | floatformat:0 | intcomma }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>

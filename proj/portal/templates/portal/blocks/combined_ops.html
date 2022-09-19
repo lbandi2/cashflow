@@ -1,0 +1,85 @@
+{% load static %}
+
+{% load humanize %}
+
+<div class="container d-none d-md-block"> <!-- Desktop version -->
+
+    <div class="my-3 container" style="width: 900px" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:last_ops' 1 %}">Tarjeta</a></li>
+            <li class="breadcrumb-item"  style="--bs-breadcrumb-divider: '/';"><a class="text-decoration-none" href="{% url 'accounts:last_ops' %}">Cuenta</a></li>
+        </ol>
+    </div>
+
+
+    <div class="container" style="width: 800px">
+        <div class="table">
+            <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="col-1">&#128176;</th>
+                    <th scope="col" class="col-2">Fecha</th>
+                    <th scope="col" class="col-2">Entidad</th>
+                    <th scope="col" class="col-1 px-md-5">Importe</th>
+                    <th scope="col" class="col-2">Categoría</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in combined_ops %}
+                <tr>
+                    {% if item.card %}
+                        <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=18px> {{ item.card.number }}</a></td>
+                    {% elif item.account %}
+                        <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name }}</a></td>
+                    {% endif %}
+                    <td>{{ item.date | date:"Y-m-d H:m" }}</td>
+                    <td>{{ item.entity }}</td>
+                    <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
+                    <td>{% if item.category != None %}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container d-block d-md-none"> <!-- Mobile version -->
+
+    <div class="my-3 container" align="center">
+        <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <li class="breadcrumb-item active" aria-current="page">Operaciones</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" href="{% url 'credit_cards:last_ops' 1 %}">Tarjeta</a></li>
+            <li class="breadcrumb-item"  style="--bs-breadcrumb-divider: '/';"><a class="text-decoration-none" href="{% url 'accounts:last_ops' %}">Cuenta</a></li>
+        </ol>
+    </div>
+
+
+    <div class="table">
+        <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">&#128176;</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Entidad</th>
+                <th scope="col" class="px-md-5">Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in combined_ops %}
+            <tr>
+                {% if item.card %}
+                    <td><a href="{% url 'credit_cards:update_op' item.pk %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.card.brand }}.png" height=14px> {{ item.card.number }}</a></td>
+                {% elif item.account %}
+                <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %} {{ item.account.name }}</a></td>
+                {% endif %}
+                <td>{{ item.date | date:"m-d" }}</td>
+                <td>{{ item.entity | truncatechars:15 }}</td>
+                <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:0 | intcomma }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>

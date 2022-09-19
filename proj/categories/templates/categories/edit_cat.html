@@ -146,7 +146,7 @@
 
         {% endif %}
 
-
+<br>
 
         <div class="container" align="center">
             <input
@@ -158,11 +158,37 @@
                 value="Cancelar"
                 type="button"
                 onclick="location.href='javascript:history.go(-1)'">
-            <input
+            {% comment %} <input
                 class="btn btn-danger me-1"
                 value="Borrar"
                 type="button"
-                onclick="location.href='{% url 'categories:delete' obj.id %}'">
+                onclick="location.href='{% url 'categories:delete' obj.id %}'"> {% endcomment %}
+
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#item_delete">
+                    Borrar
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="item_delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="item_delete">Categoría</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" align="left">
+                                Borrar '{{ obj.name }}'?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" onclick=location.href="{% url 'categories:delete' obj.pk %}">Borrar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
         </div>
     </form>
 </div>

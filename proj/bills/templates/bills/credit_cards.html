@@ -136,7 +136,7 @@
                     <td class="prev_items" style="text-align:center">{{ item.due_date | date:"m-d" }}</td>
                     <td class="prev_items" align="right">{{ item.min_pay | floatformat:2 | intcomma }}</td>
                     <td class="prev_items" align="right">{{ item.total_pay | floatformat:2 | intcomma }}</td>
-                    <td class="prev_items" style="text-align:center">{% if item.inconsistencies != 0 %}<strong>{{ item.inconsistencies }}</strong>{% elif item.has_inconsistency %}<strong>1</strong>{% else %}-{% endif %}</td>
+                    <td class="prev_items" style="text-align:center">{% if item.inconsistencies != 0 %}<strong>{{ item.inconsistencies }}</strong>/{{item.operations.count}}{% elif item.has_inconsistency %}<strong>1</strong>{% else %}-{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>

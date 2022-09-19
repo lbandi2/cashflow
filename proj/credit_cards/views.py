@@ -33,6 +33,7 @@ class IndexView(LoginRequiredMixin, ListView):
         queryset = {
             'last_ops': OperationCard.objects.order_by('-date')[:5],
             'pending_bills': Bill.objects.order_by('-due_date').filter(is_paid=False),
+            'pending_bills_subtotal': self.get_pending_bills_subtotal(),
             'uncategorized_ops': OperationCard.objects.order_by('-date').filter(category_id=None),
             "unbilled_spending": self.unbilled_spending_per_card(),
             "unbilled_spending_total": self.unbilled_spending(type='total'),
@@ -73,6 +74,12 @@ class IndexView(LoginRequiredMixin, ListView):
                 elif type == 'total':
                     amount += item.amount
         return amount
+
+    def get_pending_bills_subtotal(self):
+        subtotal = 0
+        for bill in Bill.objects.order_by('-due_date').filter(is_paid=False):
+            subtotal += bill.min_pay
+        return subtotal
 
 
 
@@ -135,11 +142,11 @@ def LastOpsView_api(request):
     page_obj = paginator.get_page(page_number)
     data = [
         {
-            "date": kw.date,
+            "date": kw.date.strftime('%Y-%m-%d %H:%M'),
             "type": kw.type,
             "entity": kw.entity,
             "amount": kw.amount,
-            "category": kw.category
+            "category": kw.category.name
         } 
         for kw in page_obj.object_list]
 

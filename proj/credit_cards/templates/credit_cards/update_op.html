@@ -26,8 +26,68 @@
 <div class="form-group col col-md-5 mx-auto">
     <form method="post">
         {% csrf_token %}
-            {{ form.as_p }}
-        <br><br>
+            {% comment %} {{ form.as_p }} {% endcomment %}
+
+            <p>
+                <label for="id_card">Tarjeta:</label>
+                <input type="text" class="form-control" value="{{ object.card | upper }}" disabled=True>
+            </p>
+            <p>
+                <label for="date">Fecha:</label>{{ form.date }}
+            </p>
+            <p>
+                <label for="date">Tipo:</label>{{ form.type }}
+            </p>
+            <p>
+                <label for="date">Entidad:</label>{{ form.entity }}
+            </p>
+            <p>
+                <label for="date">Monto:</label>{{ form.amount }}
+            </p>
+            <div class="container-responsive">
+                <div class="row">
+                    <div class="col-9 mx-auto">
+                        <p>
+                            <label for="category">Categoría:</label>{{ form.category }}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <br>
+                        <p>
+                            <input
+                            class="btn btn-sm btn-warning me-1"
+                            value="Crear"
+                            type="button"
+                            onclick="location.href='{% url "categories:add" %}'">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <p>
+                <label for="date">Cuotas:</label>{{ form.dues }}
+            </p>
+
+            <div class="container-responsive">
+                <div class="row">
+                    <div class="col-9 mx-auto">
+                        <p>
+                            <label for="trip">Viaje:</label>{{ form.trip }}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <br>
+                        <p>
+                            <input
+                            class="btn btn-sm btn-warning me-1"
+                            value="Crear"
+                            type="button"
+                            onclick="location.href='{% url "trips:add" %}'">
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <br><br>
 
         <div class="container" align="center">
             <input
