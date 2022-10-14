@@ -82,7 +82,6 @@ class IndexView(LoginRequiredMixin, ListView):
         return subtotal
 
 
-
 class OpUpdate(RedirectToPreviousMixin, UpdateView):
     template_name = 'credit_cards/update_op.html'
     form_class = EditOpForm

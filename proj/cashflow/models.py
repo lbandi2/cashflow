@@ -128,12 +128,18 @@ class Trip(models.Model):
         else:
             return text_string + date_string
 
+    def shortest_str(self):
+        return f"{self.place} ({self.start_date.strftime('%Y')})"
+
     # def operations(self):
     #     card_ops = OperationCard.objects.filter(trip_id=self.id)
     #     account_ops = OperationAccount.objects.filter(trip_id=self.id)
     #     return sorted(chain(card_ops, account_ops), key=lambda instance: instance.date, reverse=True)
 
     def card_operations(self):
+        """
+        Returning a queryset of OperationCard objects that have a trip_id that matches the id of the currenttrip.
+        """
         return OperationCard.objects.filter(trip_id=self.id).order_by('-date')
 
     def account_operations(self):

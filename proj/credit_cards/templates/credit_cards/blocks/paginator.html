@@ -1,0 +1,27 @@
+
+
+    <div class="pagination">
+        <div class="col-md-12" align="right">
+            <span class="step-links">
+            {% for page_number in page_obj.adjusted_elided_pages %}
+                {% if page_number == page_obj.paginator.ELLIPSIS %}
+                    {{page_number}}
+                {% elif page_number == page_obj.number %}
+                    <a
+                        href="#"
+                        class="btn btn-outline-secondary btn-sm {% if page_number == page_obj.number %}current{% endif %}"
+                    >
+                        {{page_number}}
+                    </a>
+                {% else %}
+                    <a
+                        href="{% url 'credit_cards:last_ops' page_number %}"
+                        class="btn btn-secondary btn-sm"
+                    >
+                        {{page_number}}
+                    </a>
+                {% endif %}
+            {% endfor %}
+            </span>
+        </div>
+    </div>

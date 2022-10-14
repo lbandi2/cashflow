@@ -18,9 +18,9 @@
             <table class="table table-sm table-hover">
             <thead>
                 <tr>
-                    <th scope="col" class="col-1">&#128176;</th>
+                    <th scope="col" class="col-2">&#128176;</th>
                     <th scope="col" class="col-2">Fecha</th>
-                    <th scope="col" class="col-2">Entidad</th>
+                    <th scope="col" class="col-3">Entidad</th>
                     <th scope="col" class="col-1 px-md-5">Importe</th>
                     <th scope="col" class="col-2">Categoría</th>
                 </tr>
@@ -33,7 +33,7 @@
                     {% elif item.account %}
                         <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink link-dark text-decoration-none">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.name }}</a></td>
                     {% endif %}
-                    <td>{{ item.date | date:"Y-m-d H:m" }}</td>
+                    <td>{{ item.date | date:"Y-m-d" }}</td>
                     <td>{{ item.entity }}</td>
                     <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
                     <td>{% if item.category != None %}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
