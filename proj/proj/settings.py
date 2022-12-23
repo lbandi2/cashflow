@@ -145,7 +145,7 @@ USE_TZ = False
 STATIC_URL = 'static/'
 
 # STATIC_ROOT = '/home/sergio/scripts/cashflow/proj/static'
-STATI_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static"
