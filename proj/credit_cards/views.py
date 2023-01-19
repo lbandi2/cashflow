@@ -155,7 +155,7 @@ def LastOpsView_api(request):
             "type": kw.type,
             "entity": kw.entity,
             "amount": kw.amount,
-            "category": kw.category.name
+            "category": kw.category.name if kw.category else None
         } 
         for kw in page_obj.object_list]
 
