@@ -61,21 +61,23 @@ class PortalView(LoginRequiredMixin, ListView):
     def unbilled_spending_per_card(self):
         spending = []
         for card in Card.objects.all():
-            if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
-                spent_min = self.card_unbilled_spending(card.id, type='min')
-                spent_total = self.card_unbilled_spending(card.id, type='total')
-                spending.append([card, spent_min, spent_total])
+            if card.is_active:
+                if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
+                    spent_min = self.card_unbilled_spending(card.id, type='min')
+                    spent_total = self.card_unbilled_spending(card.id, type='total')
+                    spending.append([card, spent_min, spent_total])
         return spending
 
     def unbilled_spending(self, type):
         total = 0
         for card in Card.objects.all():
-            if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
-                if type == 'total':
-                    spent = self.card_unbilled_spending(card.id, type='total')
-                else:
-                    spent = self.card_unbilled_spending(card.id, type='min')
-                total += spent
+            if card.is_active:
+                if not card.account.is_corporate and not card.type == 'debit':         # exclude corporate and debit cards
+                    if type == 'total':
+                        spent = self.card_unbilled_spending(card.id, type='total')
+                    else:
+                        spent = self.card_unbilled_spending(card.id, type='min')
+                    total += spent
         return total
 
     def card_unbilled_spending(self, card_id, type):
