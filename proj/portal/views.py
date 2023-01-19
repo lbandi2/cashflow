@@ -92,6 +92,14 @@ class PortalView(LoginRequiredMixin, ListView):
                     amount += item.amount / item.dues
                 elif type == 'total':
                     amount += item.amount
+        else:   # if no previous bills for this card exist
+            ops = OperationCard.objects.order_by('-date')\
+                .filter(card_id=card_id)
+            for item in ops:
+                if type == 'min':
+                    amount += item.amount / item.dues
+                elif type == 'total':
+                    amount += item.amount
         return amount
 
 
