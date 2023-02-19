@@ -41,7 +41,7 @@ ALLOWED_HOSTS = [
     '*'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://192.168.0.95:8001', 'http://scripts.lan.net:8001']
+CSRF_TRUSTED_ORIGINS = ['http://192.168.0.95:8001', 'http://scripts.lan.net:8001', 'http://vm-scripts.lan:8001']
 
 # Application definition
 
