@@ -10,4 +10,5 @@ urlpatterns = [
     path('operations/filter/by_table/', views.LastOpsView.as_view(), name='last_ops'),
     path('operations/filter/by_day/', views.LastOpsByDayView.as_view(), name='last_ops_by_day'),
     path('operations/filter/by_account/', views.LastOpsByAccountView.as_view(), name='last_ops_by_account'),
+    path('operations.json', views.LastOpsView_api, name="terms-api"),  # Operations API
 ]

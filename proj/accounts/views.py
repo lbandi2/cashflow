@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 from datetime import datetime, timedelta
 
@@ -32,6 +33,33 @@ class IndexView(LoginRequiredMixin, ListView):
             'uncategorized_ops': OperationAccount.objects.order_by('-date').filter(category_id=None)
                     }
         return queryset
+
+
+def LastOpsView_api(request):
+    page_number = request.GET.get("page", 1)
+    per_page = request.GET.get("per_page", 15)
+    query = OperationAccount.objects.all().order_by('-date')
+    paginator = Paginator(query, per_page)
+    page_obj = paginator.get_page(page_number)
+    data = [
+        {
+            "date": kw.date.strftime('%Y-%m-%d %H:%M'),
+            "type": kw.type,
+            "entity": kw.entity,
+            "amount": kw.amount,
+            "category": kw.category.name if kw.category else None
+        } 
+        for kw in page_obj.object_list]
+
+    payload = {
+        "page": {
+            "current": page_obj.number,
+            "has_next": page_obj.has_next(),
+            "has_previous": page_obj.has_previous(),
+        },
+        "data": data
+    }
+    return JsonResponse(payload)
 
 
 class OpUpdate(RedirectToPreviousMixin, UpdateView):
