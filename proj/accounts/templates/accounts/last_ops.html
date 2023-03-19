@@ -70,7 +70,8 @@
             <tr>
                 <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none rowlink">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %} {{ item.account.name }}</a></td>
                 <td>{{ item.date | date:"Y-m-d H:m" }}</td>
-                <td>{{ item.entity }}</td>
+                {% comment %} <td>{{ item.entity }}</td> {% endcomment %}
+                <td>{% if item.comment != None %}{{ item.comment | truncatechars:20 }}{% else %}{{ item.entity | truncatechars:20 }}{% endif %}</td>
                 <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
                 {% comment %} <td>{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.owner }}</td> {% endcomment %}
                 <td>{% if item.category != None %}{{ item.category }}{% else %}-{% endif %}</td>
@@ -97,7 +98,8 @@
             <tr>
                 <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %}</a></td>
                 <td>{{ item.date | date:"m-d" }}</td>
-                <td>{{ item.entity | truncatechars:15 }}</td>
+                {% comment %} <td>{{ item.entity | truncatechars:15 }}</td> {% endcomment %}
+                <td>{% if item.comment != None %}{{ item.comment | truncatechars:15 }}{% else %}{{ item.entity | truncatechars:15 }}{% endif %}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             </tr>
         {% endfor %}
