@@ -16,7 +16,7 @@ class EditOpForm(ModelForm):
     dues = forms.IntegerField(label='Cuotas', min_value=1, widget=forms.NumberInput(attrs={'class': 'form-control'}))
     # category = forms.CharField(label='Categoría', max_length=20, widget=forms.Select(choices=CATEGORIES, attrs={'class': 'form-select'}))
     category = forms.ModelChoiceField(label='Categoría', required=False, queryset=OperationCategories.objects.all().order_by('name'), widget=forms.Select(attrs={'class': 'form-select'}))
-    comment = forms.CharField(label='Comentario', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    comment = forms.CharField(label='Comentario', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     trip = forms.ModelChoiceField(label='Viaje', required=False, queryset=Trip.objects.all().order_by('-start_date'), widget=forms.Select(attrs={'class': 'form-select'}))
 
     class Meta:
