@@ -13,11 +13,12 @@ class EditOpForm(ModelForm):
     amount = forms.FloatField(label='Monto', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     entity = forms.CharField(label='Entidad', disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     category = forms.ModelChoiceField(label='Categoría', required=False, queryset=OperationCategories.objects.all().order_by('name'), widget=forms.Select(attrs={'class': 'form-select'}))
+    comment = forms.CharField(label='Comentario', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     trip = forms.ModelChoiceField(label='Viaje', required=False, queryset=Trip.objects.all().order_by('-start_date'), widget=forms.Select(attrs={'class': 'form-select'}))
 
     class Meta:
         model = OperationAccount
-        fields = ('id', 'date', 'type', 'entity', 'amount', 'category', 'trip')
+        fields = ('id', 'date', 'type', 'entity', 'amount', 'category', 'comment', 'trip')
 
 # class PasswordForm(PasswordChangeForm):
 #     old_password = forms.CharField(label='Current password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))

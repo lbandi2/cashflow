@@ -216,6 +216,7 @@ class OperationAccount(models.Model):
     # category = models.CharField(max_length=20, null=True, blank=True)
     category = models.ForeignKey(OperationCategories, null=True, blank=True, default=None, on_delete = models.SET_NULL)
     dues = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    comment = models.CharField(max_length=100, null=True)
     trip = models.ForeignKey(Trip, null=True, blank=True, on_delete = models.SET_NULL)
 
     def __str__(self):
