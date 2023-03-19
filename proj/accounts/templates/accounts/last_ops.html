@@ -71,7 +71,7 @@
                 <td><a href="{% url 'accounts:update_op' item.pk %}" class="link-dark text-decoration-none rowlink">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %} {{ item.account.name }}</a></td>
                 <td>{{ item.date | date:"Y-m-d H:m" }}</td>
                 {% comment %} <td>{{ item.entity }}</td> {% endcomment %}
-                <td>{% if item.comment != None %}{{ item.comment | truncatechars:20 }}{% else %}{{ item.entity | truncatechars:20 }}{% endif %}</td>
+                <td>{% if item.comment != None and item.comment != '' %}{{ item.comment | truncatechars:20 }}{% else %}{{ item.entity | truncatechars:20 }}{% endif %}</td>
                 <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
                 {% comment %} <td>{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.owner }}</td> {% endcomment %}
                 <td>{% if item.category != None %}&#127991; {{ item.category | truncatechars:11 }}{% else %}-{% endif %}</td>
