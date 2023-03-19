@@ -99,7 +99,7 @@
                 <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink">{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=14px>{% endif %}</a></td>
                 <td>{{ item.date | date:"m-d" }}</td>
                 {% comment %} <td>{{ item.entity | truncatechars:15 }}</td> {% endcomment %}
-                <td>{% if item.comment != None %}{{ item.comment | truncatechars:15 }}{% else %}{{ item.entity | truncatechars:15 }}{% endif %}</td>
+                <td>{% if item.comment != None and item.comment != '' %}{{ item.comment | truncatechars:15 }}{% else %}{{ item.entity | truncatechars:15 }}{% endif %}</td>
                 <td align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
             </tr>
         {% endfor %}
