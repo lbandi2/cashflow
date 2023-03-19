@@ -30,7 +30,7 @@
                 {% comment %} <td>{{ item.entity }}</td> {% endcomment %}
                 <td>{% if item.comment != None %}{{ item.comment | truncatechars:20 }}{% else %}{{ item.entity | truncatechars:20 }}{% endif %}</td>
                 <td style="text-align:right" class="col-1 px-md-5">{{ item.amount | floatformat:2 | intcomma }}</td>
-                <td>{% if item.category != ''%}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
+                <td>{% if item.category != None %}&#127991; {{ item.category | truncatechars:11 }}{% else %}-{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>

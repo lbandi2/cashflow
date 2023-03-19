@@ -74,7 +74,7 @@
                 <td>{% if item.comment != None %}{{ item.comment | truncatechars:20 }}{% else %}{{ item.entity | truncatechars:20 }}{% endif %}</td>
                 <td class="currency" align="right">{{ item.amount | floatformat:2 | intcomma }}</td>
                 {% comment %} <td>{% if item.account.bank == 'bancolombia' %}<img src="{% static 'images/bancolombia-logo.png' %}" height=17px>{% endif %} {{ item.account.owner }}</td> {% endcomment %}
-                <td>{% if item.category != None %}{{ item.category }}{% else %}-{% endif %}</td>
+                <td>{% if item.category != None %}&#127991; {{ item.category | truncatechars:11 }}{% else %}-{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>
