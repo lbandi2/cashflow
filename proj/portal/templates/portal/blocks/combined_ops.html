@@ -36,7 +36,7 @@
                     <td>{{ item.date | date:"Y-m-d" }}</td>
                     <td>{% if item.comment != None %}{{ item.comment | truncatechars:20 }}{% else %}{{ item.entity | truncatechars:20 }}{% endif %}</td>
                     <td class="px-md-5" style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
-                    <td>{% if item.category != None %}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
+                    <td>{% if item.category != None %}&#127991; {{ item.category | truncatechars:10 }}{% else %}-{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
