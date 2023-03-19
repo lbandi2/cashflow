@@ -21,7 +21,7 @@ class EditOpForm(ModelForm):
 
     class Meta:
         model = OperationCard
-        fields = ('id', 'date', 'type', 'entity', 'amount', 'category', 'dues', 'trip')
+        fields = ('id', 'date', 'type', 'entity', 'amount', 'category', 'dues', 'comment', 'trip')
 
 
 # class PasswordForm(PasswordChangeForm):
