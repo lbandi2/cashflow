@@ -55,7 +55,7 @@
             <tr>
                 <td><a href="{% url 'accounts:update_op' item.pk %}" class="rowlink text-decoration-none link-dark"><img src="{% static 'images/' %}{{ item.account.bank }}-logo.png" height=18px> {{ item.account.name }}</a></td>
                 <td>{{ item.date | date:"Y-m-d H:m" }}</td>
-                <td>{{ item.entity }}</td>
+                <td>{% if item.comment != None and item.comment != '' %}{{ item.comment | truncatechars:20 }}{% else %}{{ item.entity | truncatechars:20 }}{% endif %}</td>
                 <td class="px-md-3" style="text-align:right">{{ item.amount | floatformat:2 | intcomma }}</td>
                 <td>{% if item.category != None %}&#127991; {{ item.category }}{% else %}-{% endif %}</td>
             </tr>
