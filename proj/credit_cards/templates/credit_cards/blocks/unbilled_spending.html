@@ -27,7 +27,8 @@
             {% for item in unbilled_spending %}
                     <tr>
                     <td><a href="{% url 'credit_cards:unbilled_spending' item.0.id %}" class="rowlink link-dark text-decoration-none"><img src="{% static 'images/cards/' %}{{ item.0.brand }}.png" height=18px> {{ item.0.number }}</a></td>
-                    <td>{{ item.0.name }}</td>
+                    {% comment %} <td>{{ item.0.name }}</td> {% endcomment %}
+                    <td>{% if item.0.comment != None and item.0.comment != '' %}{{ item.0.comment | truncatechars:20 }}{% else %}{{ item.0.name | truncatechars:20 }}{% endif %}</td>
                     <td class="px-md-3" style="text-align:right">{{ item.1 | floatformat:2 | intcomma }}</td>
                     <td class="px-md-3" style="text-align:right">{{ item.2 | floatformat:2 | intcomma }}</td>
                     </tr>
